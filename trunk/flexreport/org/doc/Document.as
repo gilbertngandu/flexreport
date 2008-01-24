@@ -108,7 +108,7 @@
 			
 		private function getBitmap(target:UIComponent):Bitmap
 		{
-			var bd:BitmapData = new BitmapData(target.width,target.height);
+			var bd:BitmapData = new BitmapData(target.width, target.height, false);
 			var m:Matrix = new Matrix();
 			bd.draw(target,m);
 			
@@ -122,7 +122,7 @@
 		{
 			var scale:Number = THUMB_WIDTH / target.width;
 			var matrix:Matrix = new Matrix();
-			var bd:BitmapData = new BitmapData( THUMB_WIDTH, target.height * scale );
+			var bd:BitmapData = new BitmapData( THUMB_WIDTH, target.height * scale, false );
 
 			matrix.scale( scale, scale );
 			bd.draw( target, matrix );
