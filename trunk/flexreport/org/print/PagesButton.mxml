@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * 
+ */
+ -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="70" 
+	height="22" 
+	creationComplete="initComponent()" 
+	horizontalScrollPolicy="off" 
+	verticalScrollPolicy="off">
+	
+	<mx:Metadata>
+        [Event(name="pageChanged",type="flash.events.Event")]	
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var pageNumber:int;
+						
+			[Bindable]
+			public var pageCount:int;
+			
+			public var inputNumber:int;
+			private function pageNumberChangeHandler(event:Event):void {
+				
+				inputNumber = int(input.text);
+				input.text = ""+pageNumber;
+				dispatchEvent(new Event("pageChanged"));
+			}
+			
+            private function initComponent():void {
+            	input.addEventListener(TextEvent.TEXT_INPUT,interceptChar,true,0);
+            }
+            
+			private function interceptChar( event:TextEvent ) : void {
+            	var valid:Boolean = false;
+            	switch(event.text) {
+            		case "0": 
+            		case "1":
+            		case "2":
+            		case "3":
+            		case "4":
+            		case "5":
+            		case "6":
+            		case "7":
+            		case "8":
+            		case "9": valid = true; break
+            	}
+            	
+            	if(!valid) {
+            		event.preventDefault();
+            	}
+            }			
+		]]>
+	</mx:Script>
+	<mx:TextInput id="input" text="{pageNumber}" width="22" height="22" maxChars="3" focusOut="pageNumberChangeHandler(event)" enter="pageNumberChangeHandler(event)" x="4" y="0"/>
+	<mx:Label text="{&quot;/ &quot; +  pageCount}" height="22" color="#1f2325"  right="10" width="30" y="2"/>
+	
+</mx:Canvas>

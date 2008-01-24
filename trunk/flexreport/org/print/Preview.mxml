@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * 
+ */
+ -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="700" 
+	height="400" 
+	enabled="{(_doc!=null)?true:false}" 
+	xmlns:print="org.print.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.states.SetProperty;
+			import org.doc.Document;
+			import mx.core.SpriteAsset;
+			import mx.core.UIComponent;
+			import mx.collections.ArrayCollection;
+
+            public function nextPage():void {
+            	_doc.nextPage();
+            }
+            
+            public function previousPage():void {
+            	_doc.previousPage();
+            }
+            
+            public function goto(page:int):int {
+            	if(_doc) {
+            		return _doc.goto(page);
+            	}
+            	return 0;
+            }
+            
+            [Bindable]
+            private var pages:Array;
+            [Bindable]
+            private var thumbnails:Array;            
+            [Bindable]
+            private var _doc:Document;
+            public function set doc(doc:Document):void {           	
+            	_doc = doc;
+            	if(_doc==null) {
+            		pages = null;
+            		thumbnails = null;
+            	} else {
+	            	pages = _doc.pages;
+	            	thumbnails = _doc.thumbs;            		
+            	}
+            }
+            
+            private function pageNumberChangeHandler(event:Event):void {
+            	toolbar.pageNumber = goto(toolbar.inputNumber);
+            }
+            
+            private function thumbSelectHandler(event:Event):void {
+            	goto(thumbs.selectedIndex+1);
+            }	
+		]]>
+	</mx:Script>
+	<print:PrintToolBar id="toolbar"
+		left="0" 
+		right="0" 
+		top="0"
+		print="_doc.doPrint()"
+		previous="previousPage()"
+		next="nextPage()"
+		zoomIn="page.zoomIn()"
+		zoomOut="page.zoomOut()"
+		pageNumber="{_doc.pageNumber}"
+		pageCount="{_doc.pageCount}"
+		pageChanged="pageNumberChangeHandler(event)"
+		zoom="{page.zoom}"
+		pdf="_doc.generatePDF()"
+		/>
+	<mx:Panel layout="absolute" title="{_doc.title}" left="0" right="0" top="38" bottom="0">
+		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120"/>
+		<print:Page id="page" source="{_doc.currentPage}" right="0" bottom="0" top="0" left="120"/>	
+	</mx:Panel>
+
+
+</mx:Canvas>
