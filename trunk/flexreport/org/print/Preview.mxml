@@ -46,16 +46,19 @@
 			import mx.core.UIComponent;
 			import mx.collections.ArrayCollection;
 
-            public function nextPage():void {
+            public function nextPage():void
+            {
             	_doc.nextPage();
             }
             
-            public function previousPage():void {
+            public function previousPage():void
+            {
             	_doc.previousPage();
             }
             
-            public function goto(page:int):int {
-            	if(_doc) {
+            public function goto(page:int):int
+            {
+            	if (_doc) {
             		return _doc.goto(page);
             	}
             	return 0;
@@ -63,13 +66,17 @@
             
             [Bindable]
             private var pages:Array;
+            
             [Bindable]
-            private var thumbnails:Array;            
+            private var thumbnails:Array; 
+                       
             [Bindable]
             private var _doc:Document;
-            public function set doc(doc:Document):void {           	
+            
+            public function set doc(doc:Document):void
+            {           	
             	_doc = doc;
-            	if(_doc==null) {
+            	if (_doc == null) {
             		pages = null;
             		thumbnails = null;
             	} else {
@@ -78,13 +85,15 @@
             	}
             }
             
-            private function pageNumberChangeHandler(event:Event):void {
+            private function pageNumberChangeHandler(event:Event):void
+            {
             	toolbar.pageNumber = goto(toolbar.inputNumber);
             }
             
-            private function thumbSelectHandler(event:Event):void {
-            	goto(thumbs.selectedIndex+1);
-            }	
+            private function thumbSelectHandler(event:Event):void
+            {
+            	goto(thumbs.selectedIndex + 1);
+            }
 		]]>
 	</mx:Script>
 	<print:PrintToolBar id="toolbar"

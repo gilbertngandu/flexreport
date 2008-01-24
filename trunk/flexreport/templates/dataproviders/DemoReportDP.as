@@ -31,15 +31,18 @@
  */
  
  
-package templates.dataproviders {
+package templates.dataproviders
+{
 	
-	public class DemoReportDP {
+	public class DemoReportDP
+	{
 		public var text:String;
 		
 		[Embed(source="/assets/logo.png")] 
 		public var logo:Class;	
 					
-		public function DemoReportDP(text:String) {
+		public function DemoReportDP(text:String)
+		{
 			this.text = text;
 		}
 	}

@@ -84,7 +84,9 @@
 			public var pageCount:int;
 			
 			public var inputNumber:int;
-			private function pageNumberChangeHandler(event:Event):void {
+			
+			private function pageNumberChangeHandler(event:Event):void
+			{
 				inputNumber = pages.inputNumber;
 				dispatchEvent(new Event("pageChanged"));
 				
@@ -93,19 +95,23 @@
 			[Bindable]
 			public var zoom:Number=1;
 			
-			private function pdf():void {
+			private function pdf():void
+			{
 				dispatchEvent(new Event("pdf"));
 			}
 						
-			private function print():void {
+			private function print():void
+			{
 				dispatchEvent(new Event("print"));
 			}  
 			
-			private function previous():void {
+			private function previous():void
+			{
 				dispatchEvent(new Event("previous"));
 			}
 			
-			private function next():void {
+			private function next():void
+			{
 				dispatchEvent(new Event("next"));
 			}
 			
@@ -113,7 +119,8 @@
 				dispatchEvent(new Event("zoomIn"));
 			}
 			
-			private function zoomOut():void {
+			private function zoomOut():void
+			{
 				dispatchEvent(new Event("zoomOut"));
 			}
 																	          			

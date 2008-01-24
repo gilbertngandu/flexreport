@@ -29,7 +29,8 @@
  * Contributors:
  * 
  */
-package org.doc {
+package org.doc
+{
 	import flash.display.Bitmap;
 	import mx.core.UIComponent;
 	import flash.geom.Matrix;
@@ -38,8 +39,10 @@ package org.doc {
 	import flash.display.DisplayObject;
 	import mx.core.IFlexDisplayObject;
 	
-	public class ComponentUtils {
-		public function ComponentUtils() {
+	public class ComponentUtils
+	{
+		public function ComponentUtils():void
+		{
 			
 		}
 		
@@ -57,9 +60,10 @@ package org.doc {
 			return result;			
 		}
 
-		public static function duplicateComponent(source:UIComponent):UIComponent {
+		public static function duplicateComponent(source:UIComponent):UIComponent
+		{
 			var container:Container = new Container();
-			var clone:IFlexDisplayObject = container.createComponentFromDescriptor(source.descriptor,true);
+			var clone:IFlexDisplayObject = container.createComponentFromDescriptor(source.descriptor, true);
 			
 			return clone as UIComponent;
 		}

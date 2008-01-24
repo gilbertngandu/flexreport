@@ -52,20 +52,23 @@
 			public var pageCount:int;
 			
 			public var inputNumber:int;
-			private function pageNumberChangeHandler(event:Event):void {
+			private function pageNumberChangeHandler(event:Event):void
+			{
 				
 				inputNumber = int(input.text);
 				input.text = ""+pageNumber;
 				dispatchEvent(new Event("pageChanged"));
 			}
 			
-            private function initComponent():void {
+            private function initComponent():void
+            {
             	input.addEventListener(TextEvent.TEXT_INPUT,interceptChar,true,0);
             }
             
-			private function interceptChar( event:TextEvent ) : void {
+			private function interceptChar(event:TextEvent):void
+			{
             	var valid:Boolean = false;
-            	switch(event.text) {
+            	switch (event.text) {
             		case "0": 
             		case "1":
             		case "2":
@@ -78,7 +81,7 @@
             		case "9": valid = true; break
             	}
             	
-            	if(!valid) {
+            	if (!valid) {
             		event.preventDefault();
             	}
             }			

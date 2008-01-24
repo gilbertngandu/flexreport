@@ -70,16 +70,18 @@
 					"<p><b>     Body:</b> add contents inside this container. The Body shows components when they fit one page, so you don't have components split in half.</p>";
 					
 	        [Bindable] private var doc:Document = null;
-	        private function generateDocument():void {
+	        private function generateDocument():void
+	        {
 	        	var source:DemoReportDP = new DemoReportDP(text);
-	         	doc = new Document("templates.demo.DemoReport",source);
+	         	doc = new Document("templates.demo.DemoReport", source);
 	         	
 	         	doc.pdfScript = "http://www.kemelyon.com/flexreport/create.php";
 	         	doc.pdfEnabled = true;
 	        	printPreview.doc = doc;
 	        }
 	        
-			private function initApplication():void {
+			private function initApplication():void
+			{
 				generateDocument();
 			}
 		]]>

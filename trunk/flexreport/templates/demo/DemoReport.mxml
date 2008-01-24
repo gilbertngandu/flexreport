@@ -59,12 +59,14 @@
         	import templates.dataproviders.DemoReportDP;
         	
 			public var _dataProvider:DemoReportDP;	
-			public function set dataProvider(value:DemoReportDP):void {
+			public function set dataProvider(value:DemoReportDP):void
+			{
 				_dataProvider = value;				
 				loadData();
 			}
 			
-			public function loadData():void {
+			public function loadData():void
+			{
 				myText.htmlText = _dataProvider.text;	
 				image.source = _dataProvider.logo;
 			}
@@ -83,7 +85,8 @@
 			/* *************** */ 
 			/* DEFAULT METHODS */	
 			/* *************** */						
-			private function initComponent():void {
+			private function initComponent():void
+			{
 				pageNumber = 1;
 				showPage("first");
 			}
@@ -91,31 +94,34 @@
             [Bindable]
             public var pageNumber:Number = 1;
             						
-            public function showPage(pageType:String):void {
-                if(pageType == "first" || pageType == "middle") {
-                    header.includeInLayout=true;
+            public function showPage(pageType:String):void
+            {
+                if (pageType == "first" || pageType == "middle") {
+                    header.includeInLayout = true;
                     header.visible = true;                	
                 }
-                if(pageType == "middle" || pageType == "last") {
+                if (pageType == "middle" || pageType == "last") {
                     header.includeInLayout=false;
                     header.visible = false;                 
                 }
-                if(pageType == "last") {
+                if (pageType == "last") {
                     header.includeInLayout=false;
                     header.visible = false;
                 }
                 validateNow();
             }
 			
-			public function reset():void {			
+			public function reset():void
+			{			
 				body.reset();
 				
 				pageNumber = 1;
 				showPage("first");				
 			}
 			
-	        public function nextPage():Boolean {
-				if(body.validNextPage) {
+	        public function nextPage():Boolean
+	        {
+				if (body.validNextPage) {
 		            body.nextPage();
 		            pageNumber++;
 		            
