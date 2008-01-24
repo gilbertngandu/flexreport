@@ -50,7 +50,8 @@
 			[Bindable]
 			public var selectedIndex:int = -1;
 			
-			private function thumbSelectHandler(event:MouseEvent):void {
+			private function thumbSelectHandler(event:MouseEvent):void
+			{
 				selectedIndex = event.currentTarget.thumbIndex;
 				dispatchEvent(new Event("select"));
 			}

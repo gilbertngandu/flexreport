@@ -46,34 +46,35 @@
 		{			
 			var nextPosition:int = verticalScrollPosition + numLines - maxVerticalScrollPosition;	
 		
-			return (nextPosition<numLines)?true:false;
+			return (nextPosition<numLines) ? true : false;
 		}   
 		
 		private var originalPercentHeight:Number;
 		private var originalHeight:Number;
 		
-		public function nextPage():void {	
-			if(validNextPage) {
-				if(!isNaN(percentHeight)) {
+		public function nextPage():void
+		{	
+			if (validNextPage) {
+				if (!isNaN(percentHeight)) {
 					originalPercentHeight = percentHeight;
 				}
-				else if(!isNaN(height)) {
+				else if (!isNaN(height)) {
 					originalHeight = height;
 				}
 				
 				var nextPosition:int = verticalScrollPosition + numLines - maxVerticalScrollPosition;
 				
-				if(nextPosition<maxVerticalScrollPosition) {
+				if (nextPosition < maxVerticalScrollPosition) {
 					verticalScrollPosition = nextPosition;
 				}
 				else {			
 					var nextHeight:Number = 0;
 					
-					for(var i:int=nextPosition-1;i<numLines;i++) {
+					for (var i:int = nextPosition - 1; i < numLines; i++) {
 						nextHeight += getLineMetrics(i).height;
 					}
 					
-					if(isNaN(originalHeight)) originalHeight = height;
+					if (isNaN(originalHeight)) originalHeight = height;
 					
 					height = nextHeight;
 					validateNow();
@@ -84,19 +85,22 @@
 			}
 		}
 		
-		override public function set htmlText(value:String):void {
+		override public function set htmlText(value:String):void
+		{
 			super.htmlText = value;
 		}
 		
-		override public function get htmlText():String {
+		override public function get htmlText():String
+		{
 			return super.htmlText;
 		}
 		
-		public function reset():void {
-			if(!isNaN(originalPercentHeight)) {
+		public function reset():void
+		{
+			if (!isNaN(originalPercentHeight)) {
 				percentHeight = originalPercentHeight;
 			}
-			else if(!isNaN(originalHeight)) {
+			else if (!isNaN(originalHeight)) {
 				height = originalHeight;
 			}
 			
@@ -106,7 +110,8 @@
 			validateNow();
 		}
 		
-		private function get numLines():Number {
+		private function get numLines():Number
+		{
 			invalidateProperties();
 			validateNow();
 			

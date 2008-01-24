@@ -47,30 +47,35 @@
 			[Bindable]
 			public var source:Bitmap;
 			
-			public function init():void {
+			public function init():void
+			{
 
 			}
 			
 			[Bindable]
 			public var _thumbIndex:int = -1;
-			public function set thumbIndex(value:int):void {
+			public function set thumbIndex(value:int):void
+			{
 				_thumbIndex = value;
 				selectionChange();
 			}
 			
-			public function get thumbIndex():int {
+			public function get thumbIndex():int
+			{
 				return _thumbIndex
 			}
 			
 			private var _selectedIndex:int = -1;			
-			public function set selectedIndex(value:int):void {
+			public function set selectedIndex(value:int):void
+			{
 				_selectedIndex = value;
 				selectionChange();
 			}
 			
-			private function selectionChange():void {
-				if(thumbIndex!=-1 && _selectedIndex!=-1) {
-					if(thumbIndex!=_selectedIndex) {
+			private function selectionChange():void
+			{
+				if (thumbIndex != -1 && _selectedIndex != -1) {
+					if (thumbIndex != _selectedIndex) {
 						canvas.setStyle("borderColor","#FFFFFF");
 						canvas.setStyle("borderThickness",1);
 					}
@@ -91,6 +96,7 @@
 		borderColor="#333333"	
 		verticalScrollPolicy="off" 
 		horizontalScrollPolicy="off" backgroundColor="#e0dcdc">
+		
 		<mx:Image y="0" width="77" height="108" scaleContent="true" autoLoad="true" x="0" source="{source}"/>
 		<mx:filters> 
 		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 

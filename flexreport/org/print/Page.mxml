@@ -53,7 +53,8 @@
 		<![CDATA[
 			[Bindable]
 			private var _source:Bitmap;
-			public function set source(value:Bitmap):void {
+			public function set source(value:Bitmap):void
+			{
 				_source = value;
 				_scaledBmp = value;
 				verticalScrollPosition = 0;
@@ -61,7 +62,8 @@
 			}
 			
 			[Bindable(event="sourceChanged")]
-			public function get source():Bitmap {
+			public function get source():Bitmap
+			{
 				return _source;
 			}
 			
@@ -77,13 +79,14 @@
             private var originalWidth:Number;
             private var originalHeight:Number;
             
-            public function zoomIn():void {
-            	if(zoom==1) {
+            public function zoomIn():void
+            {
+            	if (zoom == 1) {
             		originalWidth = source.width;
             		originalHeight = source.height;
             	}
             	
-            	if(zoomPosition<zoomList.length-1) {
+            	if (zoomPosition < zoomList.length-1) {
             		zoomPosition++;
             		zoom = zoomList[zoomPosition];
            		
@@ -92,7 +95,7 @@
             		printPreview.height = originalHeight * zoom;
             		printPreview.width = originalWidth * zoom;
 
-            		if(width<printPreview.width) {
+            		if (width < printPreview.width) {
             			align("left");
             		} else {
             			align("center");
@@ -100,13 +103,14 @@
             	}
             }
             
-            public function zoomOut():void {
-            	if(zoom==1) {
+            public function zoomOut():void
+            {
+            	if (zoom == 1) {
             		originalWidth = source.width;
             		originalHeight = source.height;
             	}
             	            	
-             	if(zoomPosition>0) {
+             	if (zoomPosition > 0) {
             		zoomPosition--;
             		zoom = zoomList[zoomPosition];
            		
@@ -115,7 +119,7 @@
             		printPreview.height = originalHeight * zoom;
             		printPreview.width = originalWidth * zoom;
             		
-             		if(width<printPreview.width) {
+             		if (width < printPreview.width) {
             			align("left");
             		} else {
             			align("center");
@@ -136,10 +140,11 @@
 			return result;			
 		} */
 		            			
-        private function align(anchor:String):void {
-        	if(anchor=="center") {
+        private function align(anchor:String):void
+        {
+        	if (anchor == "center") {
 				   currentState = 'horizontal';     		
-        	}else if(anchor=="left") {
+        	} else if (anchor == "left") {
 				   currentState = 'left';        		
         	}
         	updateDisplayList(unscaledWidth,unscaledHeight);
@@ -149,12 +154,13 @@
 	<mx:Image width="595" height="842" id="printPreview" top="10" source="{_scaledBmp}" horizontalCenter="0">
 		<mx:filters> 
 		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
-		      angle='0'
-		          blurX='7' blurY='10'
-		          distance='0'
-		          alpha='0.3' color='#000000' 
-		          knockout='false' quality='2'
-		          strength='2' inner='false' hideObject='false'/>
+		      	angle='0'
+		        blurX='7' blurY='10'
+		        distance='0'
+		        alpha='0.3' color='#000000' 
+		        knockout='false' quality='2'
+		        strength='2' inner='false' hideObject='false'/>
+		          
 		</mx:filters>		
 	</mx:Image>
 </mx:Canvas>

@@ -42,42 +42,45 @@
 
 			private var children:Array;
 			
-			private function initComponent():void {
+			private function initComponent():void
+			{
 				children = getChildren();
 				render();
 			}
 				
-			private function render():void {
+			private function render():void
+			{
 				removeAllChildren();
 				
 				currentChildIndex = 0;
 				pageFirstIndex = 0;
 							
-				while (maxVerticalScrollPosition==0 && currentChildIndex<children.length) {
+				while (maxVerticalScrollPosition == 0 && currentChildIndex<children.length) {
 					addChild(children[currentChildIndex]);
 					validateNow();
 					
 					
-					if(children[currentChildIndex].hasOwnProperty("validNextPage")&&children[currentChildIndex].validNextPage) {
+					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
 						break;
 					}
 					currentChildIndex++;
 				} 
 				
-				if(currentChildIndex>=children.length) {
+				if (currentChildIndex >= children.length) {
 					currentChildIndex--;
 				}
 
-				if(maxVerticalScrollPosition!=0) {
+				if (maxVerticalScrollPosition != 0) {
 					removeChildAt(currentChildIndex);
 					validateNow();
 					currentChildIndex--;
 				}
 			}
 			
-			public function get validNextPage():Boolean {	
+			public function get validNextPage():Boolean
+			{	
 				var moreChildren:Boolean = currentChildIndex<children.length-1;
-				var morePages:Boolean = (children[currentChildIndex].hasOwnProperty("validNextPage")&&children[currentChildIndex].validNextPage);
+				var morePages:Boolean = (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage);
 				
 				return (moreChildren||morePages)?true:false;
 			}
@@ -88,11 +91,11 @@
 			public function nextPage():void {
 				var stop:Boolean = false;
 				do {
-					for(var i:int=pageFirstIndex;i<currentChildIndex;i++) {
+					for (var i:int = pageFirstIndex; i < currentChildIndex; i++) {
 						removeChild(children[i]);
 					}
 
-					if(children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
+					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
 						children[currentChildIndex].nextPage();
 					}
 					else {
@@ -101,7 +104,7 @@
 					validateNow();
 					
 					currentChildIndex++;
-					if(currentChildIndex<children.length) {
+					if (currentChildIndex < children.length) {
 						addChild(children[currentChildIndex]);
 						validateNow();
 					}
@@ -109,7 +112,7 @@
 						currentChildIndex--;
 					}
 					
-					if(maxVerticalScrollPosition!=0) {
+					if (maxVerticalScrollPosition != 0) {
 						removeChild(children[currentChildIndex]);
 						validateNow();
 						currentChildIndex--;
@@ -117,22 +120,24 @@
 					
 					stop = true;
 					
-				} while(!stop);
+				} while (!stop);
 			}
 			
-			public function reset():void {
+			public function reset():void
+			{
 				resetChildren();
 				currentChildIndex = 0;
 				removeAllChildren();
 				render();
 			}
 			
-			private function resetChildren():void {
+			private function resetChildren():void
+			{
 				var child:Object;
-				for each(child in children) {
+				for each (child in children) {
  					try {
 						child.reset();
-					} catch(err:ReferenceError) {}
+					} catch (err:ReferenceError) {}
 				}
 			}
 		]]>

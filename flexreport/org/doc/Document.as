@@ -62,7 +62,8 @@
 		[Bindable]
 		public var pageNumber:int = 1;
 		
-		public function Document(template:String, dataProvider:Object) {
+		public function Document(template:String, dataProvider:Object):void
+		{
 			var classReference:Class = getDefinitionByName(template) as Class;
 			_template = new classReference();
  			_template.initialize();
@@ -72,22 +73,22 @@
 			
 			capturePages();
 			
-			if(_template.hasOwnProperty("title")) {
+			if (_template.hasOwnProperty("title")) {
 				title = _template.title;
-			}
-			else {
+			} else {
 				title="untitled";
 			}
 		}
 		
-		public function get template():DisplayObject  {
-			
+		public function get template():DisplayObject
+		{
 			var tmp:DisplayObject = _template as DisplayObject;
 			tmp.visible = false;
 			return tmp;
 		}
 		
-		public function capturePages():void {
+		public function capturePages():void
+		{
 			Application.application.addChild(template);
 			
 			_template.validateNow();
@@ -95,7 +96,7 @@
 			do {
 				_pages.push(getBitmap(_template as UIComponent));
 				_thumbs.push(getThumb(_template as UIComponent));
-			} while(_template.nextPage());
+			} while (_template.nextPage());
 			
 			Application.application.removeChild(template);
 			
@@ -117,7 +118,8 @@
 			return result;
 		}		
 		
-		private static const THUMB_WIDTH:Number = 77;	
+		private static const THUMB_WIDTH:Number = 77;
+		
 		private function getThumb(target:UIComponent):Bitmap
 		{
 			var scale:Number = THUMB_WIDTH / target.width;
@@ -133,7 +135,8 @@
 		}
 		
 		
-		public function doPrint():void {
+		public function doPrint():void
+		{
             var printJob:FlexPrintJob = new FlexPrintJob();
             printJob.printAsBitmap = false;
                        
@@ -151,15 +154,18 @@
 			}                   		
 		}
 	    
-	    private function addObject(printJob:FlexPrintJob, object:UIComponent):void {
+	    private function addObject(printJob:FlexPrintJob, object:UIComponent):void
+	    {
 	    	printJob.addObject(object);
 	    }
 	    
 	    public var pdfEnabled:Boolean = true;
 	    public var pdfScript:String = "";
-		public function generatePDF():void {
-			if(pdfScript!="") {
-				if(pdfEnabled) {
+	    
+		public function generatePDF():void
+		{
+			if (pdfScript != "") {
+				if (pdfEnabled) {
 					var myPDFEncoder:PDF = new PDF ( Orientation.PORTRAIT, Unit.MM, Size.A4 );
 	
 					/*
@@ -175,7 +181,7 @@
 					Application.application.removeChild(template);
 					*/
 					
-					for(var i:int=0;i<pageCount;i++) {
+					for (var i:int = 0; i < pageCount; i++) {
 						myPDFEncoder.addPage();
 						/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */						
 						/* myPDFEncoder.addImage(_pages[i]); */
@@ -188,7 +194,8 @@
 			}             		
 		}
 		
-		public function enqueue(printJob:FlexPrintJob):void {
+		public function enqueue(printJob:FlexPrintJob):void
+		{
 			Application.application.addChild(template);
 			_template.validateNow();
 			_template.reset();
@@ -198,8 +205,9 @@
 			Application.application.removeChild(template);                     		
 		}
 				
-		public function nextPage():void {
-			if(pageNumber < _pages.length) {
+		public function nextPage():void
+		{
+			if (pageNumber < _pages.length) {
 				pageNumber++;
 				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
 				/* currentPage = _pages[pageNumber-1]; */
@@ -208,8 +216,9 @@
 			}
 		}
 
-		public function previousPage():void {
-			if(pageNumber>1) {
+		public function previousPage():void
+		{
+			if (pageNumber > 1) {
 				pageNumber--;
 				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
 				/* currentPage = _pages[pageNumber-1]; */
@@ -218,8 +227,9 @@
 			}
 		}
 		
-		public function goto(page:int):int {
-			if(page>0&&page<=pageCount) {
+		public function goto(page:int):int
+		{
+			if (page > 0 && page <= pageCount) {
 				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
 				/* currentPage=_pages[page-1]; */
 				currentPage = new Bitmap((_pages[page-1] as Bitmap).bitmapData.clone());
@@ -234,9 +244,10 @@
 			return _pages.length;
 		}
 				
-		public function get pages():Array {
+		public function get pages():Array
+		{
 			var result:Array = new Array();
-			for(var i:int=0;i<_pages.length;i++) {
+			for (var i:int = 0; i < _pages.length; i++) {
 				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
 				/* var page:Bitmap = _pages[i] as Bitmap; */
 				var page:Bitmap = new Bitmap((_pages[i] as Bitmap).bitmapData.clone());			
@@ -245,9 +256,10 @@
 			return result;
 		}
 
-		public function get thumbs():Array {
+		public function get thumbs():Array
+		{
 			var result:Array = new Array();
-			for(var i:int=0;i<_pages.length;i++) {
+			for (var i:int = 0; i < _pages.length; i++) {
 				var page:Bitmap = _thumbs[i] as Bitmap;
 				result.push(new Bitmap(page.bitmapData));
 			}
@@ -257,6 +269,6 @@
 		[Bindable] public var title:String;
 		
 		[Bindable]
-		public var checked:Boolean=false;
+		public var checked:Boolean = false;
 	}
 }
