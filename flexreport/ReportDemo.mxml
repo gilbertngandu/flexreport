@@ -35,7 +35,7 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" 
 	creationComplete="initApplication()" 
-	xmlns:ns1="org.print.*" viewSourceURL="srcview/index.html">
+	xmlns:ns1="org.print.*">
 	
 	<mx:Script>
 		<![CDATA[

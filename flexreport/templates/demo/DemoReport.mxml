@@ -34,7 +34,6 @@
  -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	backgroundColor="#FFFFFF" 
-	creationPolicy="all"
     paddingTop="50" 
     paddingBottom="50" 
     paddingLeft="50" 
