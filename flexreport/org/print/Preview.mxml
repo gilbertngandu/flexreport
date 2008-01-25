@@ -35,7 +35,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="700" 
 	height="400" 
-	enabled="{(_doc!=null)?true:false}" 
+	enabled="{(_doc != null) ? true : false}" 
 	xmlns:print="org.print.*">
 
 	<mx:Script>

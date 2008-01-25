@@ -50,7 +50,7 @@ package org.doc
 		{
 			var scale:Number = width / source.width;
 			var matrix:Matrix = new Matrix();
-			var bd:BitmapData = new BitmapData( width, source.height * scale );
+			var bd:BitmapData = new BitmapData( width, source.height * scale, false );
 			
 			matrix.scale( scale, scale );
 			bd.draw( source, matrix );

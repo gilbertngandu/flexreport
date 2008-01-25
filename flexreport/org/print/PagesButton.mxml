@@ -54,9 +54,8 @@
 			public var inputNumber:int;
 			private function pageNumberChangeHandler(event:Event):void
 			{
-				
 				inputNumber = int(input.text);
-				input.text = ""+pageNumber;
+				input.text = "" + pageNumber;
 				dispatchEvent(new Event("pageChanged"));
 			}
 			

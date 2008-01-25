@@ -96,17 +96,14 @@
             						
             public function showPage(pageType:String):void
             {
-                if (pageType == "first" || pageType == "middle") {
-                    header.includeInLayout = true;
-                    header.visible = true;                	
+                if (pageType === "first" || pageType === "middle") {
+                    header.includeInLayout = header.visible = true;
                 }
-                if (pageType == "middle" || pageType == "last") {
-                    header.includeInLayout=false;
-                    header.visible = false;                 
+                if (pageType === "middle" || pageType === "last") {
+                    header.includeInLayout = header.visible = false;
                 }
-                if (pageType == "last") {
-                    header.includeInLayout=false;
-                    header.visible = false;
+                if (pageType === "last") {
+                    header.includeInLayout = header.visible = false;
                 }
                 validateNow();
             }

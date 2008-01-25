@@ -93,7 +93,7 @@
 			}
 			
 			[Bindable]
-			public var zoom:Number=1;
+			public var zoom:Number = 1;
 			
 			private function pdf():void
 			{

@@ -74,8 +74,8 @@
 			
 			private function selectionChange():void
 			{
-				if (thumbIndex != -1 && _selectedIndex != -1) {
-					if (thumbIndex != _selectedIndex) {
+				if (thumbIndex !== -1 && _selectedIndex !== -1) {
+					if (thumbIndex !== _selectedIndex) {
 						canvas.setStyle("borderColor","#FFFFFF");
 						canvas.setStyle("borderThickness",1);
 					}
