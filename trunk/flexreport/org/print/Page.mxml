@@ -55,8 +55,7 @@
 			private var _source:Bitmap;
 			public function set source(value:Bitmap):void
 			{
-				_source = value;
-				_scaledBmp = value;
+				_source = _scaledBmp = value;
 				verticalScrollPosition = 0;
 				dispatchEvent(new Event("sourceChanged"));
 			}
@@ -81,7 +80,7 @@
             
             public function zoomIn():void
             {
-            	if (zoom == 1) {
+            	if (zoom === 1) {
             		originalWidth = source.width;
             		originalHeight = source.height;
             	}
@@ -105,7 +104,7 @@
             
             public function zoomOut():void
             {
-            	if (zoom == 1) {
+            	if (zoom === 1) {
             		originalWidth = source.width;
             		originalHeight = source.height;
             	}
@@ -142,9 +141,9 @@
 		            			
         private function align(anchor:String):void
         {
-        	if (anchor == "center") {
+        	if (anchor === "center") {
 				   currentState = 'horizontal';     		
-        	} else if (anchor == "left") {
+        	} else if (anchor === "left") {
 				   currentState = 'left';        		
         	}
         	updateDisplayList(unscaledWidth,unscaledHeight);

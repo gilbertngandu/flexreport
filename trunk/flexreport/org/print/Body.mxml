@@ -52,10 +52,9 @@
 			{
 				removeAllChildren();
 				
-				currentChildIndex = 0;
-				pageFirstIndex = 0;
+				currentChildIndex = pageFirstIndex = 0;
 							
-				while (maxVerticalScrollPosition == 0 && currentChildIndex<children.length) {
+				while (maxVerticalScrollPosition === 0 && currentChildIndex<children.length) {
 					addChild(children[currentChildIndex]);
 					validateNow();
 					
@@ -70,7 +69,7 @@
 					currentChildIndex--;
 				}
 
-				if (maxVerticalScrollPosition != 0) {
+				if (maxVerticalScrollPosition !== 0) {
 					removeChildAt(currentChildIndex);
 					validateNow();
 					currentChildIndex--;
@@ -112,7 +111,7 @@
 						currentChildIndex--;
 					}
 					
-					if (maxVerticalScrollPosition != 0) {
+					if (maxVerticalScrollPosition !== 0) {
 						removeChild(children[currentChildIndex]);
 						validateNow();
 						currentChildIndex--;

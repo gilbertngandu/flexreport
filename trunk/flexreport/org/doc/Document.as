@@ -164,7 +164,7 @@
 	    
 		public function generatePDF():void
 		{
-			if (pdfScript != "") {
+			if (pdfScript !== "") {
 				if (pdfEnabled) {
 					var myPDFEncoder:PDF = new PDF ( Orientation.PORTRAIT, Unit.MM, Size.A4 );
 	
