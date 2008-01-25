@@ -36,6 +36,7 @@
 	width="400" 
 	height="300" 
 	creationComplete="initComponent()">
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;

@@ -101,7 +101,7 @@
 		<mx:filters> 
 		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
 		      angle='0'
-		          blurX='5' blurY='5'
+		          blurX='4' blurY='4'
 		          distance='0'
 		          alpha='0.3' color='#000000' 
 		          knockout='false' quality='2'
