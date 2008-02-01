@@ -53,8 +53,8 @@
 			{
 				removeAllChildren();
 				
-				currentChildIndex = pageFirstIndex = 0;
-							
+				currentChildIndex = 0;		
+	
 				while (maxVerticalScrollPosition === 0 && currentChildIndex<children.length) {
 					addChild(children[currentChildIndex]);
 					validateNow();
@@ -73,6 +73,7 @@
 				if (maxVerticalScrollPosition !== 0) {
 					removeChildAt(currentChildIndex);
 					validateNow();
+					
 					currentChildIndex--;
 				}
 			}
@@ -85,42 +86,67 @@
 				return (moreChildren||morePages)?true:false;
 			}
 			
-			private var pageFirstIndex:uint = 0;
 			private var currentChildIndex:uint = 0;
 			
-			public function nextPage():void {
-				var stop:Boolean = false;
-				do {
-					for (var i:int = pageFirstIndex; i < currentChildIndex; i++) {
-						removeChild(children[i]);
-					}
+			public function nextPage():void 
+			{		
+				var firstIteration:Boolean = true;
 
-					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
-						children[currentChildIndex].nextPage();
-					}
-					else {
-						removeChild(children[currentChildIndex]);
-					}
-					validateNow();
-					
-					currentChildIndex++;
-					if (currentChildIndex < children.length) {
+				while(true) {
+					var firstIsPageable:Boolean = false;
+					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) 
+					{
+						if(children[currentChildIndex].hasOwnProperty("parent") && children[currentChildIndex].parent === this) 
+						{
+							firstIsPageable = true;
+						} 
+					} 
+											
+					if(firstIteration) 
+					{
+						removeAllChildren();
+						
+						if(firstIsPageable) {
+							addChild(children[currentChildIndex]);
+							children[currentChildIndex].nextPage();
+							validateNow();
+							
+							currentChildIndex++;						
+						}
+						
+						firstIteration = false;
+					}	
+									
+					if (currentChildIndex < children.length) 
+					{
 						addChild(children[currentChildIndex]);
 						validateNow();
+						
+						if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
+							break;
+						}						
+						currentChildIndex++;
+
+						if (currentChildIndex >= children.length) 
+						{
+							currentChildIndex--;
+							break;
+						}
 					}
 					else {
-						currentChildIndex--;
-					}
-					
-					if (maxVerticalScrollPosition !== 0) {
+						break;
+					}	
+											
+					if (maxVerticalScrollPosition !== 0) 
+					{
 						removeChild(children[currentChildIndex]);
 						validateNow();
+						
 						currentChildIndex--;
+
+						break;
 					}
-					
-					stop = true;
-					
-				} while (!stop);
+				}
 			}
 			
 			public function reset():void
