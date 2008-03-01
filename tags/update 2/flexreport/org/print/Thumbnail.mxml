@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * 
+ */
+ -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="80" 
+	height="127" 
+	verticalScrollPolicy="off" 
+	horizontalScrollPolicy="off"
+	creationComplete="init()" 
+	borderStyle="solid" 
+	borderColor="#dedede">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.BitmapAsset;
+			[Bindable]
+			public var source:Bitmap;
+			
+			public function init():void
+			{
+
+			}
+			
+			[Bindable]
+			public var _thumbIndex:int = -1;
+			public function set thumbIndex(value:int):void
+			{
+				_thumbIndex = value;
+				selectionChange();
+			}
+			
+			public function get thumbIndex():int
+			{
+				return _thumbIndex
+			}
+			
+			private var _selectedIndex:int = -1;			
+			public function set selectedIndex(value:int):void
+			{
+				_selectedIndex = value;
+				selectionChange();
+			}
+			
+			private function selectionChange():void
+			{
+				if (thumbIndex !== -1 && _selectedIndex !== -1) {
+					if (thumbIndex !== _selectedIndex) {
+						canvas.setStyle("borderColor","#FFFFFF");
+						canvas.setStyle("borderThickness",1);
+					}
+					else {
+						canvas.setStyle("borderColor","#333333");
+						canvas.setStyle("borderThickness",3);
+					}					
+				}				
+			}			
+		]]>
+	</mx:Script>
+	<mx:Canvas id="canvas"
+		x="0"
+		y="0" 
+		width="77" 
+		height="108"	
+		borderStyle="solid" 
+		borderColor="#333333"	
+		verticalScrollPolicy="off" 
+		horizontalScrollPolicy="off" backgroundColor="#e0dcdc">
+		
+		<mx:Image y="0" width="77" height="108" scaleContent="true" autoLoad="true" x="0" source="{source}"/>
+		<mx:filters> 
+		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
+		      angle='0'
+		          blurX='4' blurY='4'
+		          distance='0'
+		          alpha='0.3' color='#000000' 
+		          knockout='false' quality='2'
+		          strength='2' inner='false' hideObject='false'/>
+		</mx:filters>	
+	</mx:Canvas>
+	<mx:Label text="{_thumbIndex+1}" horizontalCenter="0" bottom="0" color="#1f2325"/>
+	
+</mx:Canvas>

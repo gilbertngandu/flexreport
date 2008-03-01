@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * 
+ */
+ -->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#FFFFFF" 
+    paddingTop="50" 
+    paddingBottom="50" 
+    paddingLeft="50" 
+    paddingRight="50" 
+    width="595" 
+    height="842" 
+    verticalScrollPolicy="off" 
+    horizontalScrollPolicy="off" 
+    xmlns="*"
+    creationComplete="initComponent()"
+    fontFamily="Timeless"
+    fontAntiAliasType="normal" 
+    xmlns:print="org.print.*" 
+    xmlns:demo="templates.demo.*">
+
+    <mx:Script>
+        <![CDATA[
+        	/* ******************************************* */
+        	/* DATAPROVIDER - CHANGE THIS SECTION TO MATCH */	
+        	/* YOUR REPORT DATA                            */
+        	/* ******************************************* */
+        	import templates.dataproviders.DemoReportDP;
+        	
+			public var _dataProvider:DemoReportDP;	
+			public function set dataProvider(value:DemoReportDP):void
+			{
+				_dataProvider = value;				
+				loadData();
+			}
+			
+			public function loadData():void
+			{
+				myText.htmlText = _dataProvider.text;	
+				image.source = _dataProvider.logo;
+			}
+			
+			/* ******************************** */
+			/* FONT - ALWAYS USE EMBEDDED FONTS */
+			/* ******************************** */
+			[Embed(mimeType="application/x-font",
+			source="/assets/fonts/timeless.TTF",fontName="Timeless",flashType="true")]
+			private var timeless:Class; 
+	
+		    [Embed(mimeType="application/x-font",
+			source="/assets/fonts/timelessb.TTF",fontName="Timeless",fontWeight="bold",flashType="true")]
+			private var timelessb:Class;
+						
+			/* *************** */ 
+			/* DEFAULT METHODS */	
+			/* *************** */						
+			private function initComponent():void
+			{
+				pageNumber = 1;
+				showPage("first");
+			}
+			
+            [Bindable]
+            public var pageNumber:Number = 1;
+            						
+            public function showPage(pageType:String):void
+            {
+                if (pageType === "first" || pageType === "middle") {
+                    header.includeInLayout = header.visible = true;
+                }
+                if (pageType === "middle" || pageType === "last") {
+                    header.includeInLayout = header.visible = false;
+                }
+                if (pageType === "last") {
+                    header.includeInLayout = header.visible = false;
+                }
+                validateNow();
+            }
+			
+			public function reset():void
+			{			
+				body.reset();
+				
+				pageNumber = 1;
+				showPage("first");				
+			}
+			
+	        public function nextPage():Boolean
+	        {
+				if (body.validNextPage) {
+		            body.nextPage();
+		            pageNumber++;
+		            
+		            if(body.validNextPage) 
+		            {
+		                showPage("middle");
+		            }  
+		            else {
+		            	showPage("last");
+		            }
+		            
+		            return true;			
+	 			}
+	 					
+	 			return false;
+	        }
+        ]]>
+    </mx:Script>
+
+    <mx:VBox width="100%" horizontalAlign="left" color="#000000">
+        <mx:Label text="Page {pageNumber}" fontSize="12"/>
+    </mx:VBox>
+	<demo:Header id="header" width="100%"/>
+	<print:Body width="100%" id="body" height="100%">
+		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
+		<print:PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
+	</print:Body>
+</mx:VBox>

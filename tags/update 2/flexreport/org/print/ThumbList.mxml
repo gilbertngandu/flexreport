@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * ============================================================================
+ * GNU Lesser General Public License
+ * ============================================================================
+ *
+ * FlexReport - Free Flex report-generating library.
+ * Copyright (C) 2008 Frederico Garcia
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Frederico Garcia
+ * fmotagarcia@kemelyon.com
+ * http://www.kemelyon.com
+ */
+ 
+/*
+ * Contributors:
+ * 
+ */
+ -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="122" 
+	height="300" 
+	backgroundColor="#dedede" 
+	xmlns:print="org.print.*">
+	
+	<mx:Metadata>
+        [Event(name="select",type="flash.events.Event")]	
+	</mx:Metadata>
+		
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			public var thumbs:Array;
+			
+			[Bindable]
+			public var selectedIndex:int = -1;
+			
+			private function thumbSelectHandler(event:MouseEvent):void
+			{
+				selectedIndex = event.currentTarget.thumbIndex;
+				dispatchEvent(new Event("select"));
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas bottom="0" top="0"  horizontalScrollPolicy="off" left="10" right="0">
+		<mx:VBox height="100%" left="5" top="5">
+			<mx:Repeater id="thumbsRepeater" dataProvider="{thumbs}">
+				<print:Thumbnail backgroundColor="#e0dcdc" source="{thumbsRepeater.currentItem}" click="thumbSelectHandler(event)" thumbIndex="{thumbsRepeater.currentIndex}" selectedIndex="{selectedIndex}"/>
+			</mx:Repeater>
+		</mx:VBox>
+	</mx:Canvas>
+</mx:Canvas>
