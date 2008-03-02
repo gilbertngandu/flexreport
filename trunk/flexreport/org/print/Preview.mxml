@@ -29,7 +29,8 @@
  
 /*
  * Contributors:
- * 
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
  */
  -->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
@@ -40,6 +41,10 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.core.IFlexDisplayObject;
+			import mx.core.Application;
+			import org.events.PageRangeEvent;
+			import mx.managers.PopUpManager;
 			import mx.states.SetProperty;
 			import org.doc.Document;
 			import mx.core.SpriteAsset;
@@ -64,6 +69,14 @@
             	return 0;
             }
             
+            public function print() : void
+            {
+            	var dialog : PrintRangeWindow = new PrintRangeWindow();
+            	dialog.currentPage = _doc.pageNumber;
+            	PopUpManager.addPopUp(dialog, this, true);
+            	PopUpManager.centerPopUp(dialog);
+            }
+            
             [Bindable]
             private var pages:Array;
             
@@ -85,6 +98,17 @@
             	}
             }
             
+            public function set zoomEnabled(value : Boolean) : void
+            {
+            	toolbar.zoomSeparator.visible = value;
+            	toolbar.zoomToolbar.visible = value;
+            }
+            
+            public function set pdfExportEnabled(value : Boolean) : void
+            {
+            	toolbar.pdfExportButton.visible = value;
+            }
+            
             private function pageNumberChangeHandler(event:Event):void
             {
             	toolbar.pageNumber = goto(toolbar.inputNumber);
@@ -94,13 +118,25 @@
             {
             	goto(thumbs.selectedIndex + 1);
             }
+            
+            public function onCreationComplete() : void
+            {
+            	systemManager.addEventListener(PageRangeEvent.PAGE_RANGE_EVENT, printRange);             	
+            }
+            
+			private function printRange(event : PageRangeEvent) : void
+			{
+				_doc.pageRangeManager = event.PageRange;
+				_doc.doPrint();	
+			}
+            
 		]]>
 	</mx:Script>
 	<print:PrintToolBar id="toolbar"
 		left="0" 
 		right="0" 
 		top="0"
-		print="_doc.doPrint()"
+		print="print()"
 		previous="previousPage()"
 		next="nextPage()"
 		zoomIn="page.zoomIn()"
@@ -110,6 +146,7 @@
 		pageChanged="pageNumberChangeHandler(event)"
 		zoom="{page.zoom}"
 		pdf="_doc.generatePDF()"
+		creationComplete="onCreationComplete()"
 		/>
 	<mx:Panel layout="absolute" title="{_doc.title}" left="0" right="0" top="38" bottom="0">
 		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120"/>
