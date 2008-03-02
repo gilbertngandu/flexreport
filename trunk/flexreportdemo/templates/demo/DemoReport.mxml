@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="org.print.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="595" height="842" xmlns:demo="templates.demo.*">
+	<mx:VBox width="100%" horizontalAlign="left" color="#000000">
+	    <mx:Label text="Page {pageNumber}" fontSize="12"/>
+	</mx:VBox>
+	<demo:Header id="header" width="100%"/>
+	<Body width="100%" id="body" height="100%">
+		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
+		<PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
+	</Body>
+	
+	<mx:Script>
+		<![CDATA[
+			public override function loadData() : void
+			{
+				myText.htmlText = dataProvider.text;	
+				image.source = dataProvider.logo;
+			}
+
+		]]>
+	</mx:Script>
+</Report>
