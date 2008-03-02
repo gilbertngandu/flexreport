@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties version="1">
+  <includeClasses>
+    <classEntry path="org.doc.ComponentUtils"/>
+    <classEntry path="org.doc.Document"/>
+    <classEntry path="org.doc.PaperFormat"/>
+    <classEntry path="org.events.PageRangeEvent"/>
+    <classEntry path="org.print.Body"/>
+    <classEntry path="org.print.Page"/>
+    <classEntry path="org.print.PagesButton"/>
+    <classEntry path="org.print.Preview"/>
+    <classEntry path="org.print.PrintRangeWindow"/>
+    <classEntry path="org.print.PrintTextArea"/>
+    <classEntry path="org.print.PrintToolBar"/>
+    <classEntry path="org.print.Report"/>
+    <classEntry path="org.print.ThumbList"/>
+    <classEntry path="org.print.Thumbnail"/>
+    <classEntry path="org.utils.IntegerUtils"/>
+    <classEntry path="org.utils.PageRangeManager"/>
+    <classEntry path="org.utils.PageRangeParser"/>
+  </includeClasses>
+  <includeResources>
+    <resourceEntry destPath="assets/page_white_acrobat.png" sourcePath="assets/page_white_acrobat.png"/>
+    <resourceEntry destPath="assets/print_zoom_out.png" sourcePath="assets/print_zoom_out.png"/>
+    <resourceEntry destPath="assets/printer.png" sourcePath="assets/printer.png"/>
+    <resourceEntry destPath="assets/fonts/timelessb.TTF" sourcePath="assets/fonts/timelessb.TTF"/>
+    <resourceEntry destPath="assets/print_next.png" sourcePath="assets/print_next.png"/>
+    <resourceEntry destPath="assets/fonts/timeless.TTF" sourcePath="assets/fonts/timeless.TTF"/>
+    <resourceEntry destPath="assets/print_zoom_in.png" sourcePath="assets/print_zoom_in.png"/>
+    <resourceEntry destPath="assets/print_previous.png" sourcePath="assets/print_previous.png"/>
+  </includeResources>
+  <namespaceManifests/>
+</flexLibProperties>

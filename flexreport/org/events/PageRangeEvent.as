@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /*
  * ============================================================================
  * GNU Lesser General Public License
@@ -29,9 +27,30 @@
  
 /*
  * Contributors:
- * 
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
  */
- -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="60%" horizontalAlign="left" >
-    <mx:Label text="FlexReport Beta" color="#000000" fontWeight="bold" fontSize="16"/>
-</mx:VBox>
+
+package org.events
+{
+	import flash.events.Event;
+	import org.utils.PageRangeManager;
+
+	public class PageRangeEvent extends Event
+	{
+		public static const PAGE_RANGE_EVENT : String = "PAGE_RANGE_EVENT";
+		
+		private var _PageRange : PageRangeManager;
+		
+		public function PageRangeEvent(pageRange : PageRangeManager)
+		{
+			super(PAGE_RANGE_EVENT);
+			_PageRange = pageRange;
+		}
+		
+		public function get PageRange() : PageRangeManager
+		{
+			return _PageRange;
+		}
+	}
+}

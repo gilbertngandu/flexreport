@@ -1,0 +1,10 @@
+#Fri Feb 29 15:02:45 CET 2008
+template.customTemplateLocation.Command=
+template.customTemplateLocation.Event=
+template.isCustom.Command=N
+template.isCustom.Event=N
+template.isCustom.Controller=N
+template.customTemplateLocation.Responder=
+template.isCustom.Responder=N
+template.customTemplateLocation.Controller=
+base.package=cairngorm

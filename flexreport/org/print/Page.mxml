@@ -58,6 +58,9 @@
 				_source = _scaledBmp = value;
 				verticalScrollPosition = 0;
 				dispatchEvent(new Event("sourceChanged"));
+				
+				printPreview.height = value.height;
+				printPreview.width = value.width;
 			}
 			
 			[Bindable(event="sourceChanged")]

@@ -27,23 +27,44 @@
  
 /*
  * Contributors:
- * 
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
  */
- 
- 
-package templates.dataproviders
+
+package org.utils
 {
-	
-	public class DemoReportDP
+	public class PageRangeManager
 	{
-		public var text:String;
+		public static const ALL:String = "all";
+		public static const RANGE:String = "range";
+		public static const CURRENT:String = "current";
 		
-		[Embed(source="/assets/logo.png")] 
-		public var logo:Class;	
-					
-		public function DemoReportDP(text:String)
+		private var RangeType:String;
+		private var PageRange:Array;
+		
+		public function PageRangeManager(rangeType : String, pageRange : Array = null)
 		{
-			this.text = text;
+			RangeType = rangeType;
+			PageRange = pageRange;
+		}
+		
+		public function canPrint(pageNumber : int) : Boolean
+		{
+			switch (RangeType)
+			{
+				case ALL:
+					return true;
+					break;
+					
+				case RANGE:
+				case CURRENT:
+					return PageRange.indexOf(pageNumber) >= 0;
+					break;
+					
+				default:
+					return false;
+					break;
+			}		
 		}
 	}
 }

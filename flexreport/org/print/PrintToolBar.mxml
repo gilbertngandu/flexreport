@@ -29,7 +29,8 @@
  
 /*
  * Contributors:
- * 
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
  */
  -->
 <mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
@@ -89,7 +90,6 @@
 			{
 				inputNumber = pages.inputNumber;
 				dispatchEvent(new Event("pageChanged"));
-				
 			}
 			
 			[Bindable]
@@ -132,18 +132,18 @@
 	</mx:HBox>
 	<mx:HBox horizontalGap="0">
 		<mx:Button width="22" height="22" icon="{printIcon}" toolTip="Print" click="print()"/>
-		<mx:Button width="22" height="22" icon="{pdfIcon}" toolTip="Export to PDF" click="pdf()"/>
-	</mx:HBox>
-	<mx:VRule height="100%"/>
-	<mx:HBox horizontalGap="0">
-		<mx:Button width="22" height="22" icon="{zoomOutIcon}" toolTip="Zoom Out" click="zoomOut()"/>
-		<mx:Button icon="{zoomInIcon}" toolTip="Zoom In" click="zoomIn()" height="22" width="22"/>
-		<mx:Label text="{(zoom*100)+&quot;%&quot;}" height="22"/>
+		<mx:Button width="22" height="22" icon="{pdfIcon}" toolTip="Export to PDF" click="pdf()" id="pdfExportButton"/>
 	</mx:HBox>
 	<mx:VRule height="100%"/>
 	<mx:HBox horizontalGap="0" verticalCenter="0">
 		<mx:Button width="22" height="22" icon="{previousIcon}" toolTip="Previous Page" click="previous()"/>
 		<mx:Button width="22" height="22" icon="{nextIcon}" toolTip="Next Page" click="next()"/>
 		<print:PagesButton id="pages" pageChanged="pageNumberChangeHandler(event)" pageNumber="{pageNumber}" pageCount="{pageCount}"/>
+	</mx:HBox>
+	<mx:VRule height="100%" id="zoomSeparator"/>
+	<mx:HBox horizontalGap="0" id="zoomToolbar">
+		<mx:Button width="22" height="22" icon="{zoomOutIcon}" toolTip="Zoom Out" click="zoomOut()" id="zoomOutButton"/>
+		<mx:Button icon="{zoomInIcon}" toolTip="Zoom In" click="zoomIn()" height="22" width="22" id="zoomInButton"/>
+		<mx:Label text="{(zoom*100)+&quot;%&quot;}" height="22"/>
 	</mx:HBox>
 </mx:ApplicationControlBar>

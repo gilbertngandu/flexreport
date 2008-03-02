@@ -27,7 +27,8 @@
  
 /*
  * Contributors:
- * 
+ * Michal Wojcik (Michal.Wojcik@sabre.com)
+ * Sylwester Bajek (Sylwester.Bajek@sabre.com)
  */
  
  package org.doc
@@ -50,10 +51,13 @@
 	import org.alivepdf.pdf.PDF;
 	import org.alivepdf.saving.Download;
 	import org.alivepdf.saving.Method;
+	import mx.core.ClassFactory;
+	import org.utils.PageRangeManager;
+	import org.print.Report;
 	
 	public class Document
 	{
-		private var _template:Object;
+		private var _template:Report;
 		private var _pages:Array = new Array();
 		private var _thumbs:Array = new Array();
 		[Bindable]
@@ -62,22 +66,36 @@
 		[Bindable]
 		public var pageNumber:int = 1;
 		
-		public function Document(template:String, dataProvider:Object):void
+		private var _templateName : String; 
+		private var _dataProvider : Object;
+		private var _paperFormat  : PaperFormat;
+		
+		private var _pageRangeManager : PageRangeManager = new PageRangeManager(PageRangeManager.ALL);
+		 		
+		public function Document(template:String, dataProvider:Object, paperFormat : PaperFormat = null):void
 		{
-			var classReference:Class = getDefinitionByName(template) as Class;
-			_template = new classReference();
- 			_template.initialize();
+			_dataProvider = dataProvider;
+			_templateName = template;
 			
-			_template.dataProvider = dataProvider; 
-			_template.invalidateDisplayList();
+			_paperFormat = paperFormat;
 			
+			createTemplate();
 			capturePages();
 			
-			if (_template.hasOwnProperty("title")) {
-				title = _template.title;
-			} else {
-				title="untitled";
-			}
+			title = _template.title;
+		}
+		
+		public function createTemplate() : void
+		{
+			var classReference:Class = getDefinitionByName(_templateName) as Class;
+			
+			_template = new classReference();
+ 			_template.initialize();
+			_template.dataProvider = _dataProvider; 
+			_template.invalidateDisplayList();
+			
+ 			if (_paperFormat != null) 			
+ 				_template.height = _template.width * _paperFormat.scale; 
 		}
 		
 		public function get template():DisplayObject
@@ -85,6 +103,11 @@
 			var tmp:DisplayObject = _template as DisplayObject;
 			tmp.visible = false;
 			return tmp;
+		}
+		
+		public function set pageRangeManager(value : PageRangeManager) : void
+		{
+			_pageRangeManager = value;
 		}
 		
 		public function capturePages():void
@@ -141,16 +164,18 @@
             printJob.printAsBitmap = false;
                        
 			if (printJob.start()) {
-				_template.reset();
+				createTemplate();
 				Application.application.addChild(template);
+				_template.validateNow();
+				_template.reset();
 				
 				do {
+					if (_pageRangeManager.canPrint(_template.pageNumber))
 					printJob.addObject(_template as UIComponent);
 				} while(_template.nextPage());
 				
 				Application.application.removeChild(template);
 				printJob.send();
-				
 			}                   		
 		}
 	    

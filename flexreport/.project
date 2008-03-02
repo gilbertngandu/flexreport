@@ -12,7 +12,14 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.adobe.flexbuilder.project.flexnature</nature>
+		<nature>com.adobe.flexbuilder.project.flexlibnature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>[source path] AlivePDF</name>
+			<type>2</type>
+			<locationURI>FLEXCOMPONENTS/AlivePDF</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
