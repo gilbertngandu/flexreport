@@ -42,6 +42,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.doc.PaperFormat;
 			import templates.demo.DemoReport;
 			import templates.dataproviders.DemoReportDP;
 			import org.doc.Document;
@@ -76,7 +77,7 @@
 	        private function generateDocument():void
 	        {
 	        	var source:DemoReportDP = new DemoReportDP(text);
-	         	doc = new Document("templates.demo.DemoReport", source);
+	         	doc = new Document("templates.demo.DemoReport", source, PaperFormat.A4);
 	         	
 	         	doc.pdfScript = "http://www.kemelyon.com/flexreport/create.php";
 	         	doc.pdfEnabled = true;
