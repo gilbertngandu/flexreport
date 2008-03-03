@@ -33,5 +33,5 @@
  */
  -->
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="60%" horizontalAlign="left" >
-    <mx:Label text="FlexReport Beta" color="#000000" fontWeight="bold" fontSize="16"/>
+    <mx:Label text="FlexReport Beta" color="#FF0000" fontWeight="bold" fontSize="16"/>
 </mx:VBox>
