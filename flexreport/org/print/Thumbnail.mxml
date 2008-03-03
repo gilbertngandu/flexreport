@@ -49,7 +49,12 @@
 			
 			public function init():void
 			{
-
+				canvas.height = source.height;
+				canvas.width = source.width;
+				thumbimage.height = source.height;
+				thumbimage.width = source.width;
+				thumbimage.load();
+				height = thumbimage.height + thumblabel.height + 2;
 			}
 			
 			[Bindable]
@@ -97,7 +102,7 @@
 		verticalScrollPolicy="off" 
 		horizontalScrollPolicy="off" backgroundColor="#e0dcdc">
 		
-		<mx:Image y="0" width="77" height="108" scaleContent="true" autoLoad="true" x="0" source="{source}"/>
+		<mx:Image y="0" width="100%" height="100%" scaleContent="false" autoLoad="false" x="0" source="{source}" id="thumbimage"/>
 		<mx:filters> 
 		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
 		      angle='0'
@@ -108,6 +113,6 @@
 		          strength='2' inner='false' hideObject='false'/>
 		</mx:filters>	
 	</mx:Canvas>
-	<mx:Label text="{_thumbIndex+1}" horizontalCenter="0" bottom="0" color="#1f2325"/>
+	<mx:Label text="{_thumbIndex+1}" horizontalCenter="0" color="#1f2325" bottom="0" height="18" id="thumblabel"/>
 	
 </mx:Canvas>

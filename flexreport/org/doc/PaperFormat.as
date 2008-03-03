@@ -26,14 +26,27 @@ package org.doc
 {
 	public class PaperFormat
 	{
+		/* EU */
 		public static const A0 : PaperFormat = new PaperFormat(841, 1189);
 		public static const A1 : PaperFormat = new PaperFormat(594, 841);
 		public static const A2 : PaperFormat = new PaperFormat(420, 594);
 		public static const A3 : PaperFormat = new PaperFormat(297, 420);
 		public static const A4 : PaperFormat = new PaperFormat(210, 297);
 		public static const A5 : PaperFormat = new PaperFormat(148, 210);
+		
+		public static const A0R : PaperFormat = new PaperFormat(1189, 841);
+		public static const A1R : PaperFormat = new PaperFormat(841, 594);
+		public static const A2R : PaperFormat = new PaperFormat(594, 420);
+		public static const A3R : PaperFormat = new PaperFormat(420, 297);
+		public static const A4R : PaperFormat = new PaperFormat(297, 210);
+		public static const A5R : PaperFormat = new PaperFormat(210, 148);
+		
+		/* US */
 		public static const Letter : PaperFormat = new PaperFormat(215.9, 279.4);
 		public static const Legal : PaperFormat = new PaperFormat(215.9, 355.6);
+
+		public static const LetterR : PaperFormat = new PaperFormat(279.4, 215.9);
+		public static const LegalR : PaperFormat = new PaperFormat(355.6, 215.9);
 		
 		private var _width : Number;
 		private var _height : Number;
