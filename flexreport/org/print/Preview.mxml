@@ -94,7 +94,9 @@
             		thumbnails = null;
             	} else {
 	            	pages = _doc.pages;
-	            	thumbnails = _doc.thumbs;            		
+	            	thumbnails = _doc.thumbs; 
+	            	page.paperFormat = doc.paperFormat;
+	            	page.paperFormat = doc.paperFormat;	
             	}
             }
             
