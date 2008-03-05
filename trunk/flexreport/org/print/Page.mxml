@@ -49,26 +49,59 @@
 			<mx:SetStyle target="{printPreview}" name="horizontalCenter"/>
 		</mx:State>
 	</mx:states>
+	
 	<mx:Script>
 		<![CDATA[
+			import org.doc.PaperFormat;
+			
+			private var sourceHeight:Number;
+			private var sourceWidth:Number;
+			
 			[Bindable]
-			private var _source:Bitmap;
-			public function set source(value:Bitmap):void
+			private var _source:ByteArray;
+					
+			public function set source(value:ByteArray):void
 			{
-				_source = _scaledBmp = value;
-				verticalScrollPosition = 0;
-				dispatchEvent(new Event("sourceChanged"));
+				_source = value;
 				
-				printPreview.height = value.height;
-				printPreview.width = value.width;
+				verticalScrollPosition = 0;
+				
+				if(_paperFormat!==null) {
+					load();
+				}
+				
+				dispatchEvent(new Event("sourceChanged"));
 			}
 			
 			[Bindable(event="sourceChanged")]
-			public function get source():Bitmap
+			public function get source():ByteArray
 			{
 				return _source;
+			}	
+					
+			[Bindable] private var _paperFormat:PaperFormat;
+			public function set paperFormat(value:PaperFormat):void {
+				_paperFormat = value;
+				
+				printPreview.height = _paperFormat.height;
+				printPreview.width = _paperFormat.width;	
+				
+				load();			
 			}
 			
+			private function load():void {
+				var loader:Loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadCompleteHandler);
+
+				loader.loadBytes(_source);
+			}
+				
+			private function loadCompleteHandler(event:Event):void {
+				var loader:Loader = Loader(event.target.loader);
+				_scaledBmp = Bitmap(loader.content);
+				_scaledBmp.smoothing = true;
+			}
+							
 			[Bindable]
 			private var _scaledBmp:Bitmap;
 			
@@ -78,24 +111,17 @@
             private var zoomList:Array =  [.25,.5,.75,1,1.5,2];
             private var zoomPosition:int = 3;
             
-            private var originalWidth:Number;
-            private var originalHeight:Number;
+            public var originalWidth:Number;
+            public var originalHeight:Number;
             
             public function zoomIn():void
             {
-            	if (zoom === 1) {
-            		originalWidth = source.width;
-            		originalHeight = source.height;
-            	}
-            	
             	if (zoomPosition < zoomList.length-1) {
             		zoomPosition++;
             		zoom = zoomList[zoomPosition];
-           		
-           			//_scaledBmp = scale(_source);
-           			
-            		printPreview.height = originalHeight * zoom;
-            		printPreview.width = originalWidth * zoom;
+           		           			
+            		printPreview.height = _paperFormat.height * zoom;
+            		printPreview.width = _paperFormat.width * zoom;
 
             		if (width < printPreview.width) {
             			align("left");
@@ -106,20 +132,13 @@
             }
             
             public function zoomOut():void
-            {
-            	if (zoom === 1) {
-            		originalWidth = source.width;
-            		originalHeight = source.height;
-            	}
-            	            	
+            {        	
              	if (zoomPosition > 0) {
             		zoomPosition--;
             		zoom = zoomList[zoomPosition];
            		
-           			//_scaledBmp = scale(_source);
-
-            		printPreview.height = originalHeight * zoom;
-            		printPreview.width = originalWidth * zoom;
+            		printPreview.height = _paperFormat.height * zoom;
+            		printPreview.width = _paperFormat.width * zoom;
             		
              		if (width < printPreview.width) {
             			align("left");
@@ -128,32 +147,23 @@
             		}          		           		
             	}           	
             }
-            
-/* 		private function scale(target:Bitmap):Bitmap
-		{
-			var matrix:Matrix = new Matrix();
-			var bd:BitmapData = new BitmapData(target.width*zoom, target.height*zoom);
-			
-			matrix.scale(zoom,zoom);
-			bd.draw(target, matrix);
-					
-			var result:Bitmap = new Bitmap(bd);
-			
-			return result;			
-		} */
-		            			
-        private function align(anchor:String):void
-        {
-        	if (anchor === "center") {
-				   currentState = 'horizontal';     		
-        	} else if (anchor === "left") {
-				   currentState = 'left';        		
-        	}
-        	updateDisplayList(unscaledWidth,unscaledHeight);
-        }			
+                     			
+	        private function align(anchor:String):void
+	        {
+	        	if (anchor === "center") {
+					   currentState = 'horizontal';     		
+	        	} else if (anchor === "left") {
+					   currentState = 'left';        		
+	        	}
+	        	updateDisplayList(unscaledWidth,unscaledHeight);
+	        }
+	        
+	        public function get bitmapData():BitmapData {
+	        	return _scaledBmp!==null?_scaledBmp.bitmapData:null;
+	        }			
 		]]>
 	</mx:Script>
-	<mx:Image width="595" height="842" id="printPreview" top="10" source="{_scaledBmp}" horizontalCenter="0">
+	<mx:Image width="{_paperFormat!==null?_paperFormat.width:PaperFormat.A4.width}" height="{_paperFormat!==null?_paperFormat.height:PaperFormat.A4.height}" id="printPreview" top="10" source="{_scaledBmp}" horizontalCenter="0">
 		<mx:filters> 
 		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
 		      	angle='0'
@@ -161,8 +171,7 @@
 		        distance='0'
 		        alpha='0.3' color='#000000' 
 		        knockout='false' quality='2'
-		        strength='2' inner='false' hideObject='false'/>
-		          
+		        strength='2' inner='false' hideObject='false'/> 
 		</mx:filters>		
 	</mx:Image>
 </mx:Canvas>
