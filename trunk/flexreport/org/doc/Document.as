@@ -33,14 +33,18 @@
  
  package org.doc
 {
+	import com.adobe.images.PNGEncoder;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Matrix;
+	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
 	
 	import mx.controls.Alert;
+	import mx.controls.Image;
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.printing.FlexPrintJob;
@@ -51,9 +55,8 @@
 	import org.alivepdf.pdf.PDF;
 	import org.alivepdf.saving.Download;
 	import org.alivepdf.saving.Method;
-	import mx.core.ClassFactory;
-	import org.utils.PageRangeManager;
 	import org.print.Report;
+	import org.utils.PageRangeManager;
 	
 	public class Document
 	{
@@ -61,7 +64,7 @@
 		private var _pages:Array = new Array();
 		private var _thumbs:Array = new Array();
 		[Bindable]
-		public var currentPage:Bitmap;
+		public var currentPage:*;
 		
 		[Bindable]
 		public var pageNumber:int = 1;
@@ -83,6 +86,10 @@
 			capturePages();
 			
 			title = _template.title;
+		}
+		
+		public function get paperFormat():PaperFormat {
+			return _paperFormat;
 		}
 		
 		public function createTemplate() : void
@@ -117,29 +124,27 @@
 			_template.validateNow();
 			_template.reset();
 			do {
-				_pages.push(getBitmap(_template as UIComponent));
+				_pages.push(getSnapshot(_template as UIComponent));
 				_thumbs.push(getThumb(_template as UIComponent));
 			} while (_template.nextPage());
 			
 			Application.application.removeChild(template);
 			
-			/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
-			/* currentPage = _pages[0] as Bitmap; */
-			currentPage = new Bitmap((_pages[0] as Bitmap).bitmapData.clone());
-			
+			currentPage = clone(_pages[0]);
 			dispatchEvent(new Event("pageCountChanged"));
 		}
+				
+		private function getSnapshot(target:UIComponent):ByteArray {
+			var scale:Number = 2;
 			
-		private function getBitmap(target:UIComponent):Bitmap
-		{
-			var bd:BitmapData = new BitmapData(target.width, target.height, false);
+			var bd:BitmapData = new BitmapData(target.width*scale, target.height*scale, false);
 			var m:Matrix = new Matrix();
+			
+			m.scale(scale,scale);
 			bd.draw(target,m);
 			
-			var result:Bitmap = new Bitmap(bd);
-			
-			return result;
-		}		
+			return PNGEncoder.encode(bd);
+		}
 		
 		private static const THUMB_WIDTH:Number = 77;
 		
@@ -171,7 +176,7 @@
 				
 				do {
 					if (_pageRangeManager.canPrint(_template.pageNumber))
-					printJob.addObject(_template as UIComponent);
+						printJob.addObject(_template as UIComponent);
 				} while(_template.nextPage());
 				
 				Application.application.removeChild(template);
@@ -189,28 +194,19 @@
 	    
 		public function generatePDF():void
 		{
+			// PDF EXPORT IMPLEMENTATION BROKEN
+			Alert.show("This feature is not yet implemented!");
+			return;
 			if (pdfScript !== "") {
 				if (pdfEnabled) {
 					var myPDFEncoder:PDF = new PDF ( Orientation.PORTRAIT, Unit.MM, Size.A4 );
 	
-					/*
-					_template.reset();
-					Application.application.addChild(template);
-					
-					do {
-						_template.validateNow();
-						myPDFEncoder.addPage();
-						myPDFEncoder.addImage(_template as DisplayObject);
-					} while(_template.nextPage());
-					
-					Application.application.removeChild(template);
-					*/
-					
 					for (var i:int = 0; i < pageCount; i++) {
 						myPDFEncoder.addPage();
-						/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */						
-						/* myPDFEncoder.addImage(_pages[i]); */
-						myPDFEncoder.addImage(new Bitmap((_pages[pageNumber-1] as Bitmap).bitmapData.clone()));						
+						
+						//TODO: CONVERT PNG TO BITMAP
+					
+						//myPDFEncoder.addImage(image);					
 					}
 					myPDFEncoder.savePDF ( Method.REMOTE, pdfScript, Download.ATTACHMENT, title + ".pdf" );        
 				} else {
@@ -234,10 +230,8 @@
 		{
 			if (pageNumber < _pages.length) {
 				pageNumber++;
-				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
-				/* currentPage = _pages[pageNumber-1]; */
-				currentPage = new Bitmap((_pages[pageNumber-1] as Bitmap).bitmapData.clone());
-				
+
+				currentPage = clone(_pages[pageNumber-1]);
 			}
 		}
 
@@ -245,19 +239,16 @@
 		{
 			if (pageNumber > 1) {
 				pageNumber--;
-				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
-				/* currentPage = _pages[pageNumber-1]; */
-				currentPage = new Bitmap((_pages[pageNumber-1] as Bitmap).bitmapData.clone());
 				
+				currentPage = clone(_pages[pageNumber-1]);
 			}
 		}
 		
 		public function goto(page:int):int
 		{
 			if (page > 0 && page <= pageCount) {
-				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
-				/* currentPage=_pages[page-1]; */
-				currentPage = new Bitmap((_pages[page-1] as Bitmap).bitmapData.clone());
+				currentPage = clone(_pages[page-1]);
+				
 				pageNumber = page;
 			}
 			
@@ -273,10 +264,7 @@
 		{
 			var result:Array = new Array();
 			for (var i:int = 0; i < _pages.length; i++) {
-				/* FIX: BITMAPDATA=NULL IN FLEX BUILDER 3  */
-				/* var page:Bitmap = _pages[i] as Bitmap; */
-				var page:Bitmap = new Bitmap((_pages[i] as Bitmap).bitmapData.clone());			
-				result.push(new Bitmap(page.bitmapData));
+				result.push(clone(_pages[i]));
 			}
 			return result;
 		}
@@ -295,5 +283,12 @@
 		
 		[Bindable]
 		public var checked:Boolean = false;
+		
+		private function clone(source:Object):*{
+		    var myBA:ByteArray = new ByteArray();
+		    myBA.writeObject(source);
+		    myBA.position = 0;
+		    return myBA.readObject();
+		}
 	}
 }
