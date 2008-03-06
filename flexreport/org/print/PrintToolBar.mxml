@@ -38,7 +38,14 @@
 	height="30" 
 	xmlns:ns1="components.toolbars.*" 
 	verticalAlign="middle" 
-	xmlns:print="org.print.*">
+	xmlns:print="org.print.*"
+   	fillAlphas="[1,1]"
+   	fillColors="[#f7f7f7, #dbdbdb]"
+   	backgroundAlpha="1"
+   	cornerRadius="3"
+   	dropShadowEnabled="true"
+   	shadowDistance="3"
+   	dropShadowColor="#333333">
 	
 	<mx:Metadata>
 		[Event(name="pdf",type="flash.events.Event")]
@@ -130,11 +137,17 @@
 			}
 			
 			private function zoomIn():void {
+				tbbFitMode.selectedIndex = -1;
+				fitMode = PageFit.NONE;
+				dispatchEvent(new Event("fitModeChange"));				
 				dispatchEvent(new Event("zoomIn"));
 			}
 			
 			private function zoomOut():void
 			{
+				tbbFitMode.selectedIndex = -1;
+				fitMode = PageFit.NONE;
+				dispatchEvent(new Event("fitModeChange"));				
 				dispatchEvent(new Event("zoomOut"));
 			}
 			
@@ -142,7 +155,7 @@
 			private function onFitMode(event:ItemClickEvent):void {
 				fitMode = event.index + 1;
 				dispatchEvent(new Event("fitModeChange"));
-			}														          			
+			}												          			
 		]]>
 	</mx:Script>
 	<mx:HBox left="0" right="0" top="0" bottom="0" horizontalGap="3">	
