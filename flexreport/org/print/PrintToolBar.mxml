@@ -48,10 +48,13 @@
         [Event(name="pageChanged",type="flash.events.Event")]
         [Event(name="zoomIn",type="flash.events.Event")]
         [Event(name="zoomOut",type="flash.events.Event")]
+        [Event(name="fitModeChange",type="flash.events.Event")]
 	</mx:Metadata>
 	
 	<mx:Script>
 		<![CDATA[
+			import org.doc.PageFit;
+			import mx.events.ItemClickEvent;
 
 			[Bindable]
 			[Embed(source="/assets/page_white_acrobat.png")] 
@@ -76,8 +79,19 @@
 			[Bindable]
 			[Embed(source="/assets/print_zoom_out.png")] 
 			private var zoomOutIcon:Class;
-									
-											
+				
+			[Bindable]						
+			[Embed(source="/assets/page_white.png")]
+			public var actualSizeIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/page_white_magnify.png")]
+			public var fitPageIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/assets/page_white_width.png")]
+			public var fitWidthIcon:Class;
+														
 			[Bindable]
 			public var pageNumber:int;
 
@@ -123,7 +137,12 @@
 			{
 				dispatchEvent(new Event("zoomOut"));
 			}
-																	          			
+			
+			public var fitMode:uint = PageFit.ACTUAL_PAGE_SIZE;
+			private function onFitMode(event:ItemClickEvent):void {
+				fitMode = event.index + 1;
+				dispatchEvent(new Event("fitModeChange"));
+			}														          			
 		]]>
 	</mx:Script>
 	<mx:HBox left="0" right="0" top="0" bottom="0" horizontalGap="3">	
@@ -140,6 +159,17 @@
 		<mx:Button width="22" height="22" icon="{nextIcon}" toolTip="Next Page" click="next()"/>
 		<print:PagesButton id="pages" pageChanged="pageNumberChangeHandler(event)" pageNumber="{pageNumber}" pageCount="{pageCount}"/>
 	</mx:HBox>
+	<mx:VRule height="100%"/>
+	<mx:HBox horizontalGap="0">
+		<mx:ToggleButtonBar buttonWidth="22" toggleOnClick="false" id="tbbFitMode" horizontalGap="1"
+			itemClick="onFitMode(event)">
+			<mx:Array>
+				<mx:Object icon="{actualSizeIcon}" toolTip="Actual Page Size" buttonMode="true" enabled="false"/>
+				<mx:Object icon="{fitPageIcon}" toolTip="Fit Page" buttonMode="true" enabled="false"/>
+				<mx:Object icon="{fitWidthIcon}" toolTip="Fit Width" buttonMode="true" enabled="false"/>
+			</mx:Array>
+		</mx:ToggleButtonBar>		
+	</mx:HBox>	
 	<mx:VRule height="100%" id="zoomSeparator"/>
 	<mx:HBox horizontalGap="0" id="zoomToolbar">
 		<mx:Button width="22" height="22" icon="{zoomOutIcon}" toolTip="Zoom Out" click="zoomOut()" id="zoomOutButton"/>

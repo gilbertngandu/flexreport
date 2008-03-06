@@ -41,6 +41,9 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.doc.PageFit;
+			import mx.events.ResizeEvent;
+			import mx.states.SetStyle;
 			import mx.core.IFlexDisplayObject;
 			import mx.core.Application;
 			import org.events.PageRangeEvent;
@@ -53,17 +56,23 @@
 
             public function nextPage():void
             {
+        		scroller.horizontalScrollPosition = 0;
+        		scroller.verticalScrollPosition = 0;            	
             	_doc.nextPage();
             }
             
             public function previousPage():void
             {
+        		scroller.horizontalScrollPosition = 0;
+        		scroller.verticalScrollPosition = 0;
             	_doc.previousPage();
             }
             
             public function goto(page:int):int
             {
             	if (_doc) {
+            		scroller.horizontalScrollPosition = 0;
+            		scroller.verticalScrollPosition = 0;
             		return _doc.goto(page);
             	}
             	return 0;
@@ -96,7 +105,6 @@
 	            	pages = _doc.pages;
 	            	thumbnails = _doc.thumbs; 
 	            	page.paperFormat = doc.paperFormat;
-	            	page.paperFormat = doc.paperFormat;	
             	}
             }
             
@@ -131,7 +139,72 @@
 				_doc.pageRangeManager = event.PageRange;
 				_doc.doPrint();	
 			}
-            
+            			
+            private var zoomList:Array =  [.5,.75,1,1.5,2];
+            private var zoomPosition:int = 2;
+			
+			private function zoomIn():void {
+				if (zoomPosition < zoomList.length-1) {
+            		zoomPosition++;
+           		      
+           		    onZoomRatio(null);   			
+            	}				
+			}
+			private function zoomOut():void {
+             	if (zoomPosition > 0) {
+            		zoomPosition--;		
+            				
+					onZoomRatio(null);
+             	}
+			}
+			
+			private function onZoomRatio(event:Event):void {
+				_fitMode = PageFit.NONE;
+				
+				var ratio:Number = Math.max(zoomList[zoomPosition], .5);
+				ratio = Math.min(ratio, 10);
+				zoomRatio = ratio;
+			}
+			
+			private function set zoomRatio(ratio:Number):void {
+				page.scaleX = page.scaleY = ratio;
+				horizontalScrollPosition = verticalScrollPosition = 0;	
+				updateControlBar();
+
+			}
+			 
+			private function updateControlBar():void {
+
+			}
+			
+			private function onResize(event:ResizeEvent):void {
+				updatePageSize();
+			}
+			
+			private var _fitMode:uint = PageFit.ACTUAL_PAGE_SIZE;
+			private function updatePageSize():void {
+				if (_fitMode != PageFit.NONE && _doc !== null) {
+					var scale:Number = 1; // Actual Page Size
+					switch (_fitMode) {
+					case PageFit.PAGE:
+						scale = (preview.height - 80) / _doc.paperFormat.height;
+						break;
+					case PageFit.WIDTH:
+						scale = (preview.width - 120 - 80) / _doc.paperFormat.width;
+						break;
+					}
+					zoomRatio = scale;
+				}
+			}
+			
+			private function onFitMode():void {
+				fitMode = toolbar.fitMode;
+			}
+			
+			private function set fitMode(mode:uint):void {
+				_fitMode = mode;
+				updatePageSize();
+			}												                                 
 		]]>
 	</mx:Script>
 	<print:PrintToolBar id="toolbar"
@@ -141,18 +214,26 @@
 		print="print()"
 		previous="previousPage()"
 		next="nextPage()"
-		zoomIn="page.zoomIn()"
-		zoomOut="page.zoomOut()"
+		zoomIn="zoomIn()"
+		zoomOut="zoomOut()"
+		fitModeChange="onFitMode()"
 		pageNumber="{_doc.pageNumber}"
 		pageCount="{_doc.pageCount}"
 		pageChanged="pageNumberChangeHandler(event)"
-		zoom="{page.zoom}"
+		zoom="1"
 		pdf="_doc.generatePDF()"
 		creationComplete="onCreationComplete()"
 		/>
-	<mx:Panel layout="absolute" title="{_doc.title}" left="0" right="0" top="38" bottom="0">
+		
+	<mx:Panel id="preview" resize="onResize(event)" layout="absolute" title="{_doc.title}" left="0" right="0" top="38" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120"/>
-		<print:Page id="page" source="{_doc.currentPage}" right="0" bottom="0" top="0" left="120"/>	
+		<mx:Canvas id="scroller" left="120" right="0" top="0" bottom="0" backgroundColor="#F0F0F0">
+			<mx:VBox id="box" horizontalAlign="center" verticalAlign="middle" 
+				paddingTop="20" paddingBottom="20" paddingLeft="20" paddingRight="20"
+				left="0" top="0" right="20" bottom="0">
+				<print:Page id="page" source="{_doc.currentPage}"/>
+			</mx:VBox>			
+		</mx:Canvas>
 	</mx:Panel>
 
 
