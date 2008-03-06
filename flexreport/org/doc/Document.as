@@ -44,18 +44,14 @@
 	import flash.utils.getDefinitionByName;
 	
 	import mx.controls.Alert;
-	import mx.controls.Image;
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.printing.FlexPrintJob;
 	
-	import org.alivepdf.layout.Orientation;
-	import org.alivepdf.layout.Size;
-	import org.alivepdf.layout.Unit;
-	import org.alivepdf.pdf.PDF;
 	import org.alivepdf.saving.Download;
 	import org.alivepdf.saving.Method;
 	import org.print.Report;
+	import org.utils.PDFEncoder;
 	import org.utils.PageRangeManager;
 	
 	public class Document
@@ -195,20 +191,13 @@
 		public function generatePDF():void
 		{
 			// PDF EXPORT IMPLEMENTATION BROKEN
-			Alert.show("This feature is not yet implemented!");
-			return;
+			//Alert.show("This feature is not yet implemented!");
+			//return;
 			if (pdfScript !== "") {
 				if (pdfEnabled) {
-					var myPDFEncoder:PDF = new PDF ( Orientation.PORTRAIT, Unit.MM, Size.A4 );
-	
-					for (var i:int = 0; i < pageCount; i++) {
-						myPDFEncoder.addPage();
-						
-						//TODO: CONVERT PNG TO BITMAP
+					var pdfEncoder:PDFEncoder = new PDFEncoder(_pages,paperFormat,Method.REMOTE, pdfScript, Download.ATTACHMENT, title + ".pdf" );
+					pdfEncoder.encode();
 					
-						//myPDFEncoder.addImage(image);					
-					}
-					myPDFEncoder.savePDF ( Method.REMOTE, pdfScript, Download.ATTACHMENT, title + ".pdf" );        
 				} else {
 					Alert.show("This feature is disabled!");
 				}
