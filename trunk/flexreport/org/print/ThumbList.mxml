@@ -60,7 +60,7 @@
 	<mx:Canvas bottom="0" top="0"  horizontalScrollPolicy="off" left="10" right="0">
 		<mx:VBox height="100%" left="5" top="5">
 			<mx:Repeater id="thumbsRepeater" dataProvider="{thumbs}">
-				<print:Thumbnail backgroundColor="#e0dcdc" source="{thumbsRepeater.currentItem}" click="thumbSelectHandler(event)" thumbIndex="{thumbsRepeater.currentIndex}" selectedIndex="{selectedIndex}"/>
+				<print:Thumbnail backgroundColor="#676767" source="{thumbsRepeater.currentItem}" click="thumbSelectHandler(event)" thumbIndex="{thumbsRepeater.currentIndex}" selectedIndex="{selectedIndex}" borderColor="#676767"/>
 			</mx:Repeater>
 		</mx:VBox>
 	</mx:Canvas>

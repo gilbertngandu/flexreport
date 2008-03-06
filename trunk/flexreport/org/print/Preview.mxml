@@ -144,13 +144,35 @@
             private var zoomPosition:int = 2;
 			
 			private function zoomIn():void {
-				if (zoomPosition < zoomList.length-1) {
+				var newPosition:int = 0;
+				var nPos:int = zoomList.length;
+				for(var i:int=0;i<nPos;i++)
+				{
+					if(zoomList[i]<=_zoomRatio) newPosition=i;
+				}
+				zoomPosition = newPosition;	
+							
+				if (zoomPosition < zoomList.length-1) {		
             		zoomPosition++;
            		      
            		    onZoomRatio(null);   			
             	}				
 			}
 			private function zoomOut():void {
+				var newPosition:int = 0;
+				var nPos:int = zoomList.length;
+				for(var i:int=0;i<nPos;i++)
+				{
+					if(zoomList[i]<_zoomRatio&&i+1<nPos) {
+						newPosition=i+1;
+					}
+					else if(zoomList[i]==_zoomRatio) {
+						newPosition=i;
+						break;
+					}
+				}
+				zoomPosition = newPosition;	
+								
              	if (zoomPosition > 0) {
             		zoomPosition--;		
             				
@@ -166,11 +188,13 @@
 				zoomRatio = ratio;
 			}
 			
+			[Bindable] private var _zoomRatio:Number = 1;
 			private function set zoomRatio(ratio:Number):void {
-				page.scaleX = page.scaleY = ratio;
+				page.scaleX = page.scaleY = _zoomRatio = ratio;
 				horizontalScrollPosition = verticalScrollPosition = 0;	
+							
 				updateControlBar();
-
+				page.render();
 			}
 			 
 			private function updateControlBar():void {
@@ -204,13 +228,21 @@
 			private function set fitMode(mode:uint):void {
 				_fitMode = mode;
 				updatePageSize();
-			}												                                 
+			}											                                 
 		]]>
 	</mx:Script>
+		
+	<mx:Canvas id="preview" resize="onResize(event)"  left="0" right="0" top="30" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120" backgroundColor="#676767"/>
+		<mx:Canvas id="scroller" left="120" right="0" top="0" bottom="0" backgroundColor="#676767">
+			<mx:VBox id="box" horizontalAlign="center" verticalAlign="middle" 
+				paddingTop="20" paddingBottom="20" paddingLeft="20" paddingRight="20"
+				left="0" top="0" right="20" bottom="0">
+				<print:Page id="page" source="{_doc.currentPage}"/>
+			</mx:VBox>			
+		</mx:Canvas>
+	</mx:Canvas>
 	<print:PrintToolBar id="toolbar"
-		left="0" 
-		right="0" 
-		top="0"
 		print="print()"
 		previous="previousPage()"
 		next="nextPage()"
@@ -220,21 +252,8 @@
 		pageNumber="{_doc.pageNumber}"
 		pageCount="{_doc.pageCount}"
 		pageChanged="pageNumberChangeHandler(event)"
-		zoom="1"
+		zoom="{Number(_zoomRatio.toFixed(2))}"
 		pdf="_doc.generatePDF()"
 		creationComplete="onCreationComplete()"
-		/>
-		
-	<mx:Panel id="preview" resize="onResize(event)" layout="absolute" title="{_doc.title}" left="0" right="0" top="38" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120"/>
-		<mx:Canvas id="scroller" left="120" right="0" top="0" bottom="0" backgroundColor="#F0F0F0">
-			<mx:VBox id="box" horizontalAlign="center" verticalAlign="middle" 
-				paddingTop="20" paddingBottom="20" paddingLeft="20" paddingRight="20"
-				left="0" top="0" right="20" bottom="0">
-				<print:Page id="page" source="{_doc.currentPage}"/>
-			</mx:VBox>			
-		</mx:Canvas>
-	</mx:Panel>
-
-
+		left="0" right="0" top="0"/>
 </mx:Canvas>

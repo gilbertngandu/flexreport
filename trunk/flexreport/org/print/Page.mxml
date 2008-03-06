@@ -37,8 +37,7 @@
 	borderColor="#FFFFFF" 
 	themeColor="#FFFFFF"
 	horizontalScrollPolicy="off"
-	verticalScrollPolicy="off"
-	>
+	verticalScrollPolicy="off">
 	
 	<mx:Metadata>
         [Event(name="complete",type="flash.events.Event")]	
@@ -49,12 +48,8 @@
 			import org.doc.PaperFormat;
 			
 			public var number:int;
-			private var sourceHeight:Number;
-			private var sourceWidth:Number;
 			
-			[Bindable]
-			private var _source:ByteArray;
-					
+			[Bindable] private var _source:ByteArray;		
 			public function set source(value:ByteArray):void
 			{
 				_source = value;
@@ -87,6 +82,7 @@
 				load();			
 			}
 			
+			[Bindable] private var _bitmap:Bitmap;
 			private function load():void {
 				var loader:Loader = new Loader();
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadCompleteHandler);
@@ -96,20 +92,32 @@
 				
 			private function loadCompleteHandler(event:Event):void {
 				var loader:Loader = Loader(event.target.loader);
-				_scaledBmp = Bitmap(loader.content);
-				_scaledBmp.smoothing = true;
+				_bitmap = Bitmap(loader.content);
+				
+				render();
+
 				dispatchEvent(new Event(Event.COMPLETE));
 			}
-							
-			[Bindable]
-			private var _scaledBmp:Bitmap;
-				        
+			
+			private var _smoothBitmap:Bitmap;
+			public function render():void {
+				var bd:BitmapData = new BitmapData(_bitmap.width, _bitmap.height, false);
+				var m:Matrix = new Matrix();
+
+				bd.draw(_bitmap,m);	
+				
+				_smoothBitmap = new Bitmap(bd);			
+				_smoothBitmap.smoothing = true;
+				
+				printPreview.source = _smoothBitmap;
+			}
+										        
 	        public function get bitmapData():BitmapData {
-	        	return _scaledBmp!==null?_scaledBmp.bitmapData:null;
+	        	return _bitmap!==null?_bitmap.bitmapData:null;
 	        }			
 		]]>
 	</mx:Script>
-	<mx:Image id="printPreview" source="{_scaledBmp}" scaleContent="true" left="0" right="0" top="0" bottom="0" autoLoad="true"/>
+	<mx:Image id="printPreview" left="0" right="0" top="0" bottom="0"/>
 	<mx:filters> 
 	    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
 	      	angle='0'
