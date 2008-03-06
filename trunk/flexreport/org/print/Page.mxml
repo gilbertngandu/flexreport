@@ -33,27 +33,22 @@
  */
  -->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="400" 
-	height="300" 
-	backgroundColor="#c0c0c0" 
-	currentState="horizontal">
+	backgroundColor="#FFFFFF" 
+	borderColor="#FFFFFF" 
+	themeColor="#FFFFFF"
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
+	>
 	
-	<mx:states>
-		<mx:State name="horizontal">
-			<mx:SetStyle target="{printPreview}" name="horizontalCenter" value="0"/>
-			<mx:SetProperty target="{printPreview}" name="scaleContent" value="true"/>
-			<mx:SetStyle name="backgroundColor" value="#f0f0f0"/>
-		</mx:State>
-		<mx:State name="left">
-			<mx:SetStyle target="{printPreview}" name="left" value="0"/>
-			<mx:SetStyle target="{printPreview}" name="horizontalCenter"/>
-		</mx:State>
-	</mx:states>
-	
+	<mx:Metadata>
+        [Event(name="complete",type="flash.events.Event")]	
+	</mx:Metadata>
+		
 	<mx:Script>
 		<![CDATA[
 			import org.doc.PaperFormat;
 			
+			public var number:int;
 			private var sourceHeight:Number;
 			private var sourceWidth:Number;
 			
@@ -83,8 +78,11 @@
 			public function set paperFormat(value:PaperFormat):void {
 				_paperFormat = value;
 				
-				printPreview.height = _paperFormat.height;
-				printPreview.width = _paperFormat.width;	
+				if(printPreview!==null)
+				{
+					height = _paperFormat.height;
+					width = _paperFormat.width;	
+				}
 				
 				load();			
 			}
@@ -100,78 +98,25 @@
 				var loader:Loader = Loader(event.target.loader);
 				_scaledBmp = Bitmap(loader.content);
 				_scaledBmp.smoothing = true;
+				dispatchEvent(new Event(Event.COMPLETE));
 			}
 							
 			[Bindable]
 			private var _scaledBmp:Bitmap;
-			
-            [Bindable]
-            public var zoom:Number = 1;
-            
-            private var zoomList:Array =  [.25,.5,.75,1,1.5,2];
-            private var zoomPosition:int = 3;
-            
-            public var originalWidth:Number;
-            public var originalHeight:Number;
-            
-            public function zoomIn():void
-            {
-            	if (zoomPosition < zoomList.length-1) {
-            		zoomPosition++;
-            		zoom = zoomList[zoomPosition];
-           		           			
-            		printPreview.height = _paperFormat.height * zoom;
-            		printPreview.width = _paperFormat.width * zoom;
-
-            		if (width < printPreview.width) {
-            			align("left");
-            		} else {
-            			align("center");
-            		}
-            	}
-            }
-            
-            public function zoomOut():void
-            {        	
-             	if (zoomPosition > 0) {
-            		zoomPosition--;
-            		zoom = zoomList[zoomPosition];
-           		
-            		printPreview.height = _paperFormat.height * zoom;
-            		printPreview.width = _paperFormat.width * zoom;
-            		
-             		if (width < printPreview.width) {
-            			align("left");
-            		} else {
-            			align("center");
-            		}          		           		
-            	}           	
-            }
-                     			
-	        private function align(anchor:String):void
-	        {
-	        	if (anchor === "center") {
-					   currentState = 'horizontal';     		
-	        	} else if (anchor === "left") {
-					   currentState = 'left';        		
-	        	}
-	        	updateDisplayList(unscaledWidth,unscaledHeight);
-	        }
-	        
+				        
 	        public function get bitmapData():BitmapData {
 	        	return _scaledBmp!==null?_scaledBmp.bitmapData:null;
 	        }			
 		]]>
 	</mx:Script>
-	<mx:Image width="{_paperFormat!==null?_paperFormat.width:PaperFormat.A4.width}" height="{_paperFormat!==null?_paperFormat.height:PaperFormat.A4.height}" id="printPreview" top="10" source="{_scaledBmp}" horizontalCenter="0">
-		<mx:filters> 
-		    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
-		      	angle='0'
-		        blurX='8' blurY='8'
-		        distance='0'
-		        alpha='0.3' color='#000000' 
-		        knockout='false' quality='2'
-		        strength='2' inner='false' hideObject='false'/> 
-		</mx:filters>		
-	</mx:Image>
+	<mx:Image id="printPreview" source="{_scaledBmp}" scaleContent="true" left="0" right="0" top="0" bottom="0" autoLoad="true"/>
+	<mx:filters> 
+	    <flash.filters:DropShadowFilter id='dropShadowFilter' xmlns:flash.filters='flash.filters.*' 
+	      	angle='0'
+	        blurX='8' blurY='8'
+	        distance='0'
+	        alpha='0.3' color='#000000' 
+	        knockout='false' quality='2'
+	        strength='2' inner='false' hideObject='false'/> 
+	</mx:filters>
 </mx:Canvas>
