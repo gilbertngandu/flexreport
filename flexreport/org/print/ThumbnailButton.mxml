@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" currentStateChange="onCurrentStateChangeHandler(event)" toolTip="Pages: Go to specific pages using thumbnail images" width="47" height="37" creationComplete="initComponent()" currentState="selected">
+	<mx:states>
+		<mx:State name="selected"/>
+		<mx:State name="out">
+			<mx:SetProperty target="{canvas1}" name="visible" value="false"/>			
+			<mx:SetStyle target="{button}" name="backgroundColor" value="#676767"/>
+			<mx:SetStyle target="{canvas2}" name="backgroundColor" value="#676767"/>
+			<mx:SetStyle target="{canvas2}" name="borderColor" value="#676767"/>
+			<mx:SetStyle target="{button}" name="borderColor" value="#676767"/>
+		</mx:State>
+		<mx:State name="over">
+			<mx:SetProperty target="{canvas1}" name="visible" value="false"/>
+		</mx:State>
+	</mx:states>
+	
+	<mx:Metadata>
+        [Event(name="toggleChange",type="flash.events.Event")]	
+	</mx:Metadata>
+		
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			private function onCurrentStateChangeHandler(event:Event):void {
+				button.filters = (currentState!=="out")?innerShadow:null;
+			}
+    		private function onMouseOver():void {
+    			if(currentState!=="selected") {
+    				currentState = "over";
+    			}
+    		}
+    		private function onMouseOut():void {
+    			if(currentState!=="selected") {
+    				currentState = "out";
+    			}
+    		}
+    		
+    		private function onMouseDown():void {
+				toggle();
+    		}
+    		
+    		[Bindable] public var selected:Boolean = true;
+    		public function toggle():void {
+    			if(currentState==="selected") {
+    				currentState=mouseOver?"over":"out";
+    				selected=false;
+    				dispatchEvent(new Event("toggleChange"));
+    			}
+    			else {
+    				currentState="selected";
+    				selected=true;
+    				dispatchEvent(new Event("toggleChange"));
+    			}
+    		}			
+			private var over:Boolean = false;			
+            private function mouseListener(evt:Event):void {        	            	            	
+	        	if(evt.type=="mouseMove") {
+	        		if(!mouseOver) {
+	        			over = false;
+	            		onMouseOut();	            			
+	        		}
+	        		else {
+	            		over = true;
+	        			onMouseOver();
+	        		}	            		
+	        	}
+	        	else if(evt.type=="mouseDown") {
+	        		over = false;
+	        		onMouseDown();
+	        	}
+            }
+            
+            private function get mouseOver():Boolean {
+            	try 
+            	{              	
+	            	var mX:int = Application.application.mouseX;
+	            	var mY:int = Application.application.mouseY;
+	            	
+	            	var globalCoordinates:Point = localToGlobal(new Point(0,0));
+	            	
+	            	var xMin:int = globalCoordinates.x;
+	            	var xMax:int = globalCoordinates.x + button.width;
+	            	
+	            	var yMin:int = globalCoordinates.y;
+	            	var yMax:int = globalCoordinates.y + button.height;    
+	            	        	
+					if(mX < xMin || mX > xMax || mY < yMin || mY > yMax) {
+	        			return false;	            			
+	        		}
+	        		else {
+	            		return true;
+	        		}
+	            }
+	            catch(e:Error) {}   
+	            return false;     			                 	
+            }
+            private function initComponent():void {
+            	Application.application.addEventListener("mouseMove", mouseListener);
+            	this.addEventListener("mouseDown", mouseListener);
+            }			
+		]]>
+	</mx:Script>
+	
+	<mx:Array id="innerShadow">
+		<flash.filters:DropShadowFilter xmlns:flash.filters='flash.filters.*' 
+				      angle='0'
+				          blurX='4' blurY='4'
+				          distance='0'
+				          alpha='0.5' color="#1f2325"
+				          knockout='false' quality='2'
+				          strength='2' inner='true' hideObject='false'/>		
+	</mx:Array>
+	<mx:Canvas
+		width="36" 
+		height="36" 
+		backgroundColor="#565656" 
+		cornerRadius="5" 
+		borderStyle="solid" 
+		borderColor="#808080" 
+		horizontalScrollPolicy="off"
+		verticalScrollPolicy="off" id="canvas2" left="0" top="0">
+		
+		<mx:Canvas id="button" backgroundColor="#565656" left="0" right="0" top="0" bottom="0" borderStyle="solid" borderColor="#565656" cornerRadius="5">
+			<mx:Image mouseChildren="false" mouseEnabled="false" width="16" height="16" horizontalCenter="0" verticalCenter="0" source="@Embed('/assets/page_white_stack.png')"/>
+		</mx:Canvas>
+
+	</mx:Canvas>
+	<mx:Canvas top="0" bottom="0" right="0" width="15" backgroundColor="#565656" id="canvas1">
+		<mx:Image mouseChildren="false" mouseEnabled="false" source="@Embed('/assets/corner.png')" height="5" scaleContent="false" autoLoad="true" id="corner" right="0" width="15" bottom="0"/>			
+		<mx:Image mouseChildren="false" mouseEnabled="false" source="@Embed('/assets/line.png')" width="15" height="5" scaleContent="false" autoLoad="true" id="line" top="0" right="0"/>	
+	</mx:Canvas>
+
+</mx:Canvas>
