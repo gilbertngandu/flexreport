@@ -187,6 +187,6 @@
 	<mx:HBox horizontalGap="0" id="zoomToolbar">
 		<mx:Button width="22" height="22" icon="{zoomOutIcon}" toolTip="Zoom Out" click="zoomOut()" id="zoomOutButton"/>
 		<mx:Button icon="{zoomInIcon}" toolTip="Zoom In" click="zoomIn()" height="22" width="22" id="zoomInButton"/>
-		<mx:Label text="{(zoom*100)+&quot;%&quot;}" height="22"/>
+		<mx:Label text="{Math.round(zoom*100)+'%'}" height="22"/>
 	</mx:HBox>
 </mx:ApplicationControlBar>
