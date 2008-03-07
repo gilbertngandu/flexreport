@@ -33,13 +33,26 @@
  */
  -->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="122" 
+	width="175" 
 	height="300" 
-	backgroundColor="#dedede" 
-	xmlns:print="org.print.*">
+	backgroundColor="#676767" 
+	xmlns:print="org.print.*"
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
+	currentState="{toggle.selected?'thumbsOn':'thumbsOff'}">
+	<mx:states>
+		<mx:State name="thumbsOn">
+			<mx:SetStyle target="{vbox1}" name="left" value="10"/>
+		</mx:State>
+		<mx:State name="thumbsOff">
+			<mx:SetProperty target="{canvas1}" name="visible" value="false"/>
+			<mx:SetProperty name="width" value="46"/>
+		</mx:State>
+	</mx:states>
 	
 	<mx:Metadata>
-        [Event(name="select",type="flash.events.Event")]	
+        [Event(name="select",type="flash.events.Event")]
+        [Event(name="toggleChange",type="flash.events.Event")]	
 	</mx:Metadata>
 		
 	<mx:Script>
@@ -55,13 +68,41 @@
 				selectedIndex = event.currentTarget.thumbIndex;
 				dispatchEvent(new Event("select"));
 			}
+			
+			private function onCloseHandler(event:MouseEvent):void {
+				toggle.toggle();
+			}
+			
+			private function onToggleChangeHandler(event:Event):void {
+				dispatchEvent(new Event("toggleChange"));
+			}
 		]]>
 	</mx:Script>
-	<mx:Canvas bottom="0" top="0"  horizontalScrollPolicy="off" left="10" right="0">
-		<mx:VBox height="100%" left="5" top="5">
-			<mx:Repeater id="thumbsRepeater" dataProvider="{thumbs}">
-				<print:Thumbnail backgroundColor="#676767" source="{thumbsRepeater.currentItem}" click="thumbSelectHandler(event)" thumbIndex="{thumbsRepeater.currentIndex}" selectedIndex="{selectedIndex}" borderColor="#676767"/>
-			</mx:Repeater>
-		</mx:VBox>
+	
+	<mx:Canvas backgroundColor="#565656" cornerRadius="5" borderStyle="solid" borderColor="#808080" left="44" top="5" bottom="5" id="canvas1" right="5">
+		<mx:Canvas backgroundColor="#565656" left="0" right="0" top="0" bottom="0" borderStyle="solid" borderColor="#565656" cornerRadius="5">
+			<mx:filters>
+				<flash.filters:DropShadowFilter xmlns:flash.filters='flash.filters.*' 
+						      angle='0'
+						          blurX='4' blurY='4'
+						          distance='0'
+						          alpha='0.5' color="#1f2325"
+						          knockout='false' quality='2'
+						          strength='2' inner='true' hideObject='false'/>		
+			</mx:filters>	
+			
+			<mx:Image source="@Embed('/assets/close.png')" height="16" scaleContent="false" autoLoad="true" id="close" right="5" width="16" click="onCloseHandler(event)" top="5"/>
+			
+			<mx:Canvas bottom="5" top="35"  verticalScrollPolicy="on" horizontalScrollPolicy="off" left="5" right="5" backgroundColor="#F5F5F5">
+				<mx:VBox height="100%" left="5" top="5" id="vbox1">
+					<mx:Repeater id="thumbsRepeater" dataProvider="{thumbs}">
+						<print:Thumbnail source="{thumbsRepeater.currentItem}" click="thumbSelectHandler(event)" thumbIndex="{thumbsRepeater.currentIndex}" selectedIndex="{selectedIndex}"/>
+					</mx:Repeater>
+				</mx:VBox>
+			</mx:Canvas>
+			<mx:Label x="4" y="3" text="Pages" color="#FFFFFF" fontWeight="bold"/>		
+		</mx:Canvas>		
 	</mx:Canvas>
+	<print:ThumbnailButton left="5" top="5" id="toggle" toggleChange="onToggleChangeHandler(event)"/>
+	
 </mx:Canvas>
