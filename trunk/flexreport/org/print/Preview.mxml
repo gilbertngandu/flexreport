@@ -54,6 +54,10 @@
 			import mx.core.UIComponent;
 			import mx.collections.ArrayCollection;
 
+			[Bindable]
+			[Embed(source="/assets/page_white_stack.png")] 
+			private var pageStackIcon:Class;
+			
             public function nextPage():void
             {
         		scroller.horizontalScrollPosition = 0;
@@ -211,10 +215,10 @@
 					var scale:Number = 1; // Actual Page Size
 					switch (_fitMode) {
 					case PageFit.PAGE:
-						scale = (preview.height - 80) / _doc.paperFormat.height;
+						scale = (preview.height - 40) / _doc.paperFormat.height;
 						break;
 					case PageFit.WIDTH:
-						scale = (preview.width - 120 - 80) / _doc.paperFormat.width;
+						scale = (preview.width - 40 - thumbs.width) / _doc.paperFormat.width;
 						break;
 					}
 					zoomRatio = scale;
@@ -228,20 +232,22 @@
 			private function set fitMode(mode:uint):void {
 				_fitMode = mode;
 				updatePageSize();
-			}											                                 
+			}	
+									                                 
 		]]>
 	</mx:Script>
 		
-	<mx:Canvas id="preview" resize="onResize(event)"  left="0" right="0" top="30" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" left="0" top="0" bottom="0" width="120" backgroundColor="#676767"/>
-		<mx:Canvas id="scroller" left="120" right="0" top="0" bottom="0" backgroundColor="#676767">
+	<mx:HBox id="preview" resize="onResize(event)" left="0" right="0" top="30" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off" horizontalGap="0" backgroundColor="#676767">
+		<print:ThumbList id="thumbs" thumbs="{thumbnails}" visible="true" select="thumbSelectHandler(event)" selectedIndex="{_doc.pageNumber-1}" height="100%" toggleChange="updatePageSize()"/>
+		<mx:Canvas id="scroller" width="100%" height="100%" backgroundColor="#676767">
 			<mx:VBox id="box" horizontalAlign="center" verticalAlign="middle" 
-				paddingTop="20" paddingBottom="20" paddingLeft="20" paddingRight="20"
+				paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"
 				left="0" top="0" right="20" bottom="0">
 				<print:Page id="page" source="{_doc.currentPage}"/>
 			</mx:VBox>			
 		</mx:Canvas>
-	</mx:Canvas>
+	</mx:HBox>
+	
 	<print:PrintToolBar id="toolbar"
 		print="print()"
 		previous="previousPage()"
