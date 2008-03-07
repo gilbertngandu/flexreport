@@ -33,7 +33,7 @@
  
  package org.doc
 {
-	import com.adobe.images.PNGEncoder;
+	import org.utils.PNGEncoder;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -139,7 +139,7 @@
 			m.scale(scale,scale);
 			bd.draw(target,m);
 			
-			return PNGEncoder.encode(bd);
+			return new PNGEncoder().encode(bd);
 		}
 		
 		private static const THUMB_WIDTH:Number = 77;
@@ -190,9 +190,6 @@
 	    
 		public function generatePDF():void
 		{
-			// PDF EXPORT IMPLEMENTATION BROKEN
-			//Alert.show("This feature is not yet implemented!");
-			//return;
 			if (pdfScript !== "") {
 				if (pdfEnabled) {
 					var pdfEncoder:PDFEncoder = new PDFEncoder(_pages,paperFormat,Method.REMOTE, pdfScript, Download.ATTACHMENT, title + ".pdf" );
