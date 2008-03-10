@@ -7,13 +7,48 @@
 	<Body width="100%" id="body" height="100%">
 		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
 		<PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
+		<mx:PrintDataGrid wordWrap="true" width="100%" height="100%" dataProvider="{dataArray2}" fontSize="14"/>
 	</Body>
 	
+	<mx:ArrayCollection id="dataArray2">
+	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
+  	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
+  	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>	    
+	</mx:ArrayCollection>	
 	<mx:Script>
 		<![CDATA[
 			public override function loadData() : void
 			{
-				myText.htmlText = dataProvider.text;	
+				myText.htmlText = dataProvider.text;
 				image.source = dataProvider.logo;
 			}
 
