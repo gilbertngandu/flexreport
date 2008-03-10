@@ -32,56 +32,121 @@
  * 
  */
  -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="400" 
-	height="300" 
-	creationComplete="initComponent()">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initComponent()">
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.printing.PrintDataGrid;
+			import mx.utils.ObjectUtil;
+			import org.idmedia.as3commons.util.HashMap;
 			import mx.core.UIComponent;
 
 			private var children:Array;
+			private var previousPage:HashMap = new HashMap();
 			
 			private function initComponent():void
 			{
 				children = getChildren();
-				render();
 			}
+			
+			private function hideAllChildren():void {
+				for each (var child:UIComponent in children) {
+					hideChild(child);
+				}				
+			}	
+			
+			private function hideAllChildrenBefore(value:uint):void {
+				for (var i:int=0; i<value; i++) {
+					hideChildAt(i);
+				}				
+			}
+						
+			private function hideChild(value:UIComponent):void {
+				value.visible = false;
+				value.includeInLayout = false;		
 				
+				validateNow();
+			}
+						
+			private function hideChildAt(value:uint):void {
+				var child:UIComponent = children[value];
+				
+				child.visible = false;
+				child.includeInLayout = false;
+
+				validateNow();
+			}
+			
+			private function showAllChildren():void {
+				for each (var child:UIComponent in children) {
+					showChild(child);
+				}				
+			}
+			
+			private function showChild(value:UIComponent):void {
+				value.visible = true;
+				value.includeInLayout = true;
+											
+				validateNow();			
+			}
+			
+			private function showChildAt(value:uint):void {
+				var child:UIComponent = children[value];
+				
+				child.visible = true;
+				child.includeInLayout = true;
+										
+				validateNow();		
+			}		
+			
+			private function savePage():void {
+				previousPage.clear();
+				for each (var child:UIComponent in children) {
+					if(child.visible) {
+						previousPage.put(child.id,child);
+					}
+				}					
+			}
+			
+			private function displayed(value:Object):Boolean {
+				return previousPage.containsValue(value);	
+			}
+			
 			private function render():void
 			{
-				removeAllChildren();
+				hideAllChildren();
 				
 				currentChildIndex = 0;		
-	
-				while (maxVerticalScrollPosition === 0 && currentChildIndex<children.length) {
-					addChild(children[currentChildIndex]);
-					validateNow();
-					
-					
-					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
+				
+				while (maxVerticalScrollPosition === 0 && currentChildIndex<numChildren) {
+					showChildAt(currentChildIndex);
+				
+					var childInstance:Object = children[currentChildIndex];
+					if (childInstance.hasOwnProperty("validNextPage") && childInstance.validNextPage) {
+						validateNow();
 						break;
 					}
 					currentChildIndex++;
 				} 
 				
-				if (currentChildIndex >= children.length) {
+				if (currentChildIndex >= numChildren) {
 					currentChildIndex--;
 				}
 
 				if (maxVerticalScrollPosition !== 0) {
-					removeChildAt(currentChildIndex);
-					validateNow();
+					hideChildAt(currentChildIndex);
 					
+					validateNow();					
 					currentChildIndex--;
 				}
+				
+				savePage();
 			}
 			
 			public function get validNextPage():Boolean
 			{	
-				var moreChildren:Boolean = currentChildIndex<children.length-1;
-				var morePages:Boolean = (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage);
+				var moreChildren:Boolean = currentChildIndex<numChildren-1;
+				var morePages:Boolean = (currentChildIndex<numChildren && children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage);
 				
 				return (moreChildren||morePages)?true:false;
 			}
@@ -89,72 +154,56 @@
 			private var currentChildIndex:uint = 0;
 			
 			public function nextPage():void 
-			{		
-				var firstIteration:Boolean = true;
-
-				while(true) {
-					var firstIsPageable:Boolean = false;
-					if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) 
-					{
-						if(children[currentChildIndex].hasOwnProperty("parent") && children[currentChildIndex].parent === this) 
-						{
-							firstIsPageable = true;
-						} 
-					} 
-											
-					if(firstIteration) 
-					{
-						removeAllChildren();
+			{	
+				hideAllChildrenBefore(currentChildIndex);
+				
+				for (var i:int=currentChildIndex; i<numChildren; i++) {				
+					var childInstance:Object = children[i];
+					
+					if (childInstance.hasOwnProperty("validNextPage")&&displayed(childInstance as UIComponent)) {
+						showChildAt(i);
 						
-						if(firstIsPageable) {
-							addChild(children[currentChildIndex]);
-							children[currentChildIndex].nextPage();
+						if (childInstance.validNextPage) {
+							childInstance.nextPage();
+						}
+			
+						if (childInstance.validNextPage) {
 							validateNow();
-							
-							currentChildIndex++;						
-						}
-						
-						firstIteration = false;
-					}	
-									
-					if (currentChildIndex < children.length) 
-					{
-						addChild(children[currentChildIndex]);
-						validateNow();
-						
-						if (children[currentChildIndex].hasOwnProperty("validNextPage") && children[currentChildIndex].validNextPage) {
-							break;
-						}						
-						currentChildIndex++;
-
-						if (currentChildIndex >= children.length) 
-						{
-							currentChildIndex--;
+							currentChildIndex = i;
 							break;
 						}
-					}
-					else {
-						currentChildIndex--;
-						break;
-					}	
-											
-					if (maxVerticalScrollPosition !== 0) 
-					{
-						removeChild(children[currentChildIndex]);
-						validateNow();
+					} else if(!displayed(childInstance)){
+						showChildAt(i);	
 						
-						currentChildIndex--;
-
+						//FIXES ISSUE WITH PRINTDATAGRID
+						childInstance.percentHeight = 100;
+						
+						currentChildIndex = i;
+						break;	
+					} else if (childInstance.validNextPage) {
+						validateNow();
+						currentChildIndex = i;
+						break;
+					} 
+					
+					if (maxVerticalScrollPosition !== 0) {
+						hideChildAt(i);
+						
+						currentChildIndex = i;
 						break;
 					}
+					currentChildIndex = i;
 				}
+				
+				
+				savePage();		
 			}
 			
 			public function reset():void
 			{
 				resetChildren();
 				currentChildIndex = 0;
-				removeAllChildren();
+				hideAllChildren();
 				render();
 			}
 			
@@ -162,9 +211,18 @@
 			{
 				var child:Object;
 				for each (child in children) {
- 					try {
-						child.reset();
-					} catch (err:ReferenceError) {}
+					if(child is PrintDataGrid) {
+						//HANDLES PRINTDATAGRID
+						//SEEMS LIKE A HACK TO ME, LOOKING FOR BETTER WAY TO DO THIS
+						child.verticalScrollPosition = 0;
+						child.invalidateSize();
+						child.invalidateDisplayList();						
+					} else {
+	 					try {
+							child.reset();
+						} catch (err:ReferenceError) {}
+					}
+
 				}
 			}
 		]]>
