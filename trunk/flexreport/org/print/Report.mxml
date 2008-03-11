@@ -51,6 +51,7 @@
 
     <mx:Script>
         <![CDATA[
+        	import mx.core.UIComponent;
         	/* ******************************************* */
         	/* DATAPROVIDER - CHANGE THIS SECTION TO MATCH */	
         	/* YOUR REPORT DATA                            */
@@ -103,7 +104,7 @@
 			{
 				pageNumber = 1;
 				title = "untitled";
-				showPage("first");
+				showPage(Page.FIRST_PAGE);
 			}
 			
 			[Bindable]
@@ -112,17 +113,49 @@
             [Bindable]
             public var pageNumber:Number = 1;
             						
-            public function showPage(pageType:String):void
+            public function showPage(pageType:uint):void
             {
-                 validateNow();
+            	
+            	var children:Array = getChildren();
+				for each (var child:UIComponent in children) {
+					if(child is PrintComponent) {
+						var printableChild:PrintComponent = child as PrintComponent;
+						
+						printableChild.pageNumber = pageNumber;
+						
+						if(pageType==Page.FIRST_PAGE&&(printableChild.showInFirstPage||printableChild.showInAllPages)) {
+							showChild(printableChild);
+						}
+						else if(pageType==Page.MIDDLE_PAGE&&(printableChild.showInMiddlePages||printableChild.showInAllPages)) {
+							showChild(printableChild);
+						}
+						else if(pageType==Page.LAST_PAGE&&(printableChild.showInLastPage||printableChild.showInAllPages)) {
+							showChild(printableChild);
+						}
+						else {
+							hideChild(printableChild);
+						}						
+					}
+				}
+                validateNow();
             }
 			
+			private function hideChild(value:UIComponent):void {
+				value.visible = false;
+				value.includeInLayout = false;		
+			}
+						
+			private function showChild(value:UIComponent):void {
+				value.visible = true;
+				value.includeInLayout = true;	
+			}
+											
 			public function reset():void
 			{			
 				body.reset();
 				
 				pageNumber = 1;
-				showPage("first");				
+				showPage(Page.FIRST_PAGE);				
 			}
 			
 	        public function nextPage():Boolean
@@ -133,10 +166,10 @@
 		            
 		            if(body.validNextPage) 
 		            {
-		                showPage("middle");
+		                showPage(Page.MIDDLE_PAGE);
 		            }  
 		            else {
-		            	showPage("last");
+		            	showPage(Page.LAST_PAGE);
 		            }
 		            
 		            return true;			
