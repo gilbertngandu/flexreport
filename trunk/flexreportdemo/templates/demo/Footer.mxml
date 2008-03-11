@@ -36,8 +36,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="400" 
 	height="30">
-	
 	<mx:Label text="FlexReport Beta" color="#000000" fontWeight="bold" fontSize="16" top="0" left="0"/>
 	<mx:Label text="Page {pageNumber}" fontSize="12" right="0" top="0"/>
 </PrintComponent>
-
