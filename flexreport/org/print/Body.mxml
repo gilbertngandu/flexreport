@@ -135,8 +135,6 @@
 
 				if (maxVerticalScrollPosition !== 0) {
 					hideChildAt(currentChildIndex);
-					
-					validateNow();					
 					currentChildIndex--;
 				}
 				
@@ -155,8 +153,6 @@
 			
 			public function nextPage():void 
 			{	
-				hideAllChildrenBefore(currentChildIndex);
-				
 				for (var i:int=currentChildIndex; i<numChildren; i++) {				
 					var childInstance:Object = children[i];
 					
@@ -166,28 +162,35 @@
 						if (childInstance.validNextPage) {
 							childInstance.nextPage();
 						}
-			
+						
+						hideAllChildrenBefore(currentChildIndex);
+						
 						if (childInstance.validNextPage) {
 							validateNow();
 							currentChildIndex = i;
 							break;
 						}
+						
 					} else if(!displayed(childInstance)){
+						hideAllChildrenBefore(currentChildIndex);
+						
 						showChildAt(i);	
 						
 						//FIXES ISSUE WITH PRINTDATAGRID
 						childInstance.percentHeight = 100;
+						validateNow();
 						
 						currentChildIndex = i;
 						break;	
 					} else if (childInstance.validNextPage) {
-						validateNow();
+						hideAllChildrenBefore(currentChildIndex);
+
 						currentChildIndex = i;
 						break;
 					} 
 					
 					if (maxVerticalScrollPosition !== 0) {
-						hideChildAt(i);
+						hideAllChildrenBefore(i+1);
 						
 						currentChildIndex = i;
 						break;
