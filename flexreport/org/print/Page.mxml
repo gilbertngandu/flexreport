@@ -47,6 +47,10 @@
 		<![CDATA[
 			import org.doc.PaperFormat;
 			
+			public static const FIRST_PAGE:uint = 0;
+			public static const MIDDLE_PAGE:uint = 1;
+			public static const LAST_PAGE:uint = 2;
+						
 			public var number:int;
 			
 			[Bindable] private var _source:ByteArray;		

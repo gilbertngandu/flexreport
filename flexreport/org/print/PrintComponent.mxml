@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[			
+			private var _showInFirstPage:Boolean = false;
+			public function set showInFirstPage(value:Boolean):void {
+				_showInFirstPage = value;
+				showInAllPages = false;
+				dispatchEvent(new Event("showInFirstPageChanged"));
+			}
+			[Bindable(event="showInFirstPageChanged")]
+			public function get showInFirstPage():Boolean {
+				return _showInFirstPage;
+			}
+			
+			private var _showInMiddlePages:Boolean = false;
+			public function set showInMiddlePages(value:Boolean):void {
+				_showInMiddlePages = value;
+				showInAllPages = false;
+				dispatchEvent(new Event("showInMiddlePagesChanged"));				
+			}
+			[Bindable(event="showInMiddlePagesChanged")]
+			public function get showInMiddlePages():Boolean {
+				return _showInMiddlePages;
+			}
+						
+			private var _showInLastPage:Boolean = false;
+			public function set showInLastPage(value:Boolean):void {
+				_showInLastPage = value;
+				showInAllPages = false;
+				dispatchEvent(new Event("showInLastPageChanged"));				
+			}
+			[Bindable(event="showInLastPageChanged")]
+			public function get showInLastPage():Boolean {
+				return _showInLastPage;
+			}
+						
+			private var _showInAllPages:Boolean = true;
+			public function set showInAllPages(value:Boolean):void {
+				if(value) {
+					showInFirstPage=showInMiddlePages=showInLastPage = false;
+				}
+				_showInAllPages = value;
+				dispatchEvent(new Event("showInAllPagesChanged"));				
+			}
+			
+			[Bindable(event="showInAllPagesChanged")]
+			public function get showInAllPages():Boolean {
+				return _showInAllPages;
+			}
+			
+			private var _pageNumber:uint;
+			public function set pageNumber(value:uint):void {
+				_pageNumber = value;
+				dispatchEvent(new Event("pageNumberChanged"));				
+			}
+			
+			[Bindable(event="pageNumberChanged")]
+			public function get pageNumber():uint {
+				return _pageNumber;
+			}		
+		]]>
+	</mx:Script>
+</mx:Canvas>
