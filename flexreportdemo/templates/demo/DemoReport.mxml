@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="org.print.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="595" height="842" xmlns:demo="templates.demo.*">
-	<mx:VBox width="100%" horizontalAlign="left" color="#000000">
-	    <mx:Label text="Page {pageNumber}" fontSize="12"/>
-	</mx:VBox>
-	<demo:Header id="header" width="100%"/>
-	<Body width="100%" id="body" height="100%">
+	<!-- REPORT LAYOUT -->
+	<demo:Header width="100%" showInAllPages="true"/>
+	
+	<Body width="100%" height="100%">
 		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
 		<PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
 		<mx:PrintDataGrid wordWrap="true" width="100%" height="100%" dataProvider="{dataArray2}" fontSize="14"/>
 	</Body>
 	
+	<demo:Footer width="100%" showInFirstPage="false" showInMiddlePages="true" showInLastPage="false"/>
+	
+	<!-- DATAPROVIDERS -->
 	<mx:ArrayCollection id="dataArray2">
 	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
 	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
@@ -44,6 +46,7 @@
 	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
 	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>	    
 	</mx:ArrayCollection>	
+	
 	<mx:Script>
 		<![CDATA[
 			public override function loadData() : void
