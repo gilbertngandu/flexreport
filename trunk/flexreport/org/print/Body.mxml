@@ -212,8 +212,7 @@
 			
 			private function resetChildren():void
 			{
-				var child:Object;
-				for each (child in children) {
+				for each (var child:Object in children) {
 					if(child is PrintDataGrid) {
 						//HANDLES PRINTDATAGRID
 						//SEEMS LIKE A HACK TO ME, LOOKING FOR BETTER WAY TO DO THIS
