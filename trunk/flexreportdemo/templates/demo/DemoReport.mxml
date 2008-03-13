@@ -6,7 +6,8 @@
 	<Body width="100%" height="100%">
 		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
 		<PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
-		<mx:PrintDataGrid wordWrap="true" width="100%" height="100%" dataProvider="{dataArray2}" fontSize="14"/>
+		<ReportDataGrid wordWrap="true" width="100%" height="100%" dataProvider="{dataArray2}" fontSize="14"/>
+		<PrintTextArea width="100%" id="myText2" height="100%" fontSize="14" textAlign="justify"/>
 	</Body>
 	
 	<demo:Footer width="100%" showInFirstPage="false" showInMiddlePages="true" showInLastPage="false"/>
@@ -53,6 +54,7 @@
 			{
 				myText.htmlText = dataProvider.text;
 				image.source = dataProvider.logo;
+				myText2.htmlText = dataProvider.text;
 			}
 
 		]]>
