@@ -99,12 +99,32 @@
 						
 			/* *************** */ 
 			/* DEFAULT METHODS */	
-			/* *************** */						
+			/* *************** */	
+			private var children:Array;					
 			private function initComponent():void
 			{
+				children = getChildren();
+				parseChildren();
+				
 				pageNumber = 1;
 				title = "untitled";
 				showPage(Page.FIRST_PAGE);
+			}
+			
+			private function parseChildren():void {
+				var nElems:uint = 0;
+				
+				var children:Array = getChildren();
+				for each (var child:Object in children) {
+					if(child is Body) {
+						body = child as Body;
+						nElems++;
+					}
+				}
+				
+				if(nElems>1) {
+					dispatchEvent(new ErrorEvent("FlexReportError",true,true,"Only one Body allowed inside each Report"));
+				}
 			}
 			
 			[Bindable]
@@ -115,7 +135,6 @@
             						
             public function showPage(pageType:uint):void
             {
-            	
             	var children:Array = getChildren();
 				for each (var child:UIComponent in children) {
 					if(child is PrintComponent) {
@@ -152,15 +171,23 @@
 											
 			public function reset():void
 			{			
-				body.reset();
+				resetChildren();
 				
 				pageNumber = 1;
 				showPage(Page.FIRST_PAGE);				
 			}
 			
+			private function resetChildren():void
+			{
+				for each (var child:Object in children) {
+ 					try {
+						child.reset();
+					} catch (err:ReferenceError) {}
+				}
+			}			
 	        public function nextPage():Boolean
 	        {
-				if (body.validNextPage) {
+				if (body&&body.validNextPage) {
 		            body.nextPage();
 		            pageNumber++;
 		            
