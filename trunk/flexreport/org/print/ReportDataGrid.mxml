@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:PrintDataGrid xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			private var originalPercentHeight:Number;
+			
+			/**
+			* setActualSize()
+			*/
+			override public function setActualSize(w:Number, h:Number):void
+			{
+				/*if (isNaN(percentHeight))
+				{
+					super.percentHeight = originalPercentHeight;
+				}
+				else
+				{
+					originalPercentHeight = percentHeight;
+				}*/
+				super.setActualSize(w, h);
+			}
+						
+		]]>
+	</mx:Script>
+</mx:PrintDataGrid>
