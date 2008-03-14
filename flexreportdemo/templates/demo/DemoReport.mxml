@@ -5,47 +5,47 @@
 	
 	<Body width="100%" height="100%">
 		<mx:Image id="image" width="189" height="61" scaleContent="false"/>
-		<PrintTextArea width="100%" id="myText" height="100%" fontSize="14" textAlign="justify"/>
-		<ReportDataGrid wordWrap="true" width="100%" height="100%" dataProvider="{dataArray2}" fontSize="14"/>
+		<PrintTextArea width="100%" id="myText" fontSize="14" textAlign="justify"/>
+		<ReportDataGrid sizeToPage="true" wordWrap="true" width="100%" dataProvider="{dataArray2}" fontSize="14"/>
 		<PrintTextArea width="100%" id="myText2" height="100%" fontSize="14" textAlign="justify"/>
+		<ReportDataGrid wordWrap="true" width="100%" dataProvider="{dataArray2}" fontSize="14"/>
+
 	</Body>
 	
 	<demo:Footer width="100%" showInFirstPage="false" showInMiddlePages="true" showInLastPage="false"/>
 	
 	<!-- DATAPROVIDERS -->
 	<mx:ArrayCollection id="dataArray2">
-	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
-	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
-	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
-	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
-	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
-	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
-	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
-	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
-	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
-	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
-	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
-	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
-	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
-	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
-  	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
-	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
-	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
-	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
-	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
-	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
-	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
-	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
-	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
-	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
-  	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
-	    <mx:Object recordName="100 Meter Run" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
-	    <mx:Object recordName="200 Meter Run" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
-	    <mx:Object recordName="400 Meter Run" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
-	    <mx:Object recordName="800 Meter Run" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
-	    <mx:Object recordName="1000 Meter Run" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
-	    <mx:Object recordName="1 Hour Run" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
-	    <mx:Object recordName="3000 Meter Steeplechase" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>	    
+	    <mx:Object recordName="1" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="2" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="3" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="4" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="5" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="6" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="7" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="8" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="9" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="10" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="11" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="12" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="13" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="14" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
+  	    <mx:Object recordName="15" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="16" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="17" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="18" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="19" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="20" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>
+	    <mx:Object recordName="21" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="22" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="23" recordAmount="21.285 km" who="Haile Gebrselassie" where="Ostrava, Czech Republic" when="6/27/2007"/>
+	    <mx:Object recordName="24" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/> 
+  	    <mx:Object recordName="25" recordAmount="7:53.63" who="Saif Saaeed Shaheen" where="Brussels, Belgium" when="9/3/2004"/>
+	    <mx:Object recordName="26" recordAmount="9.74 seconds" who="Asafa Powell" where="Rieti, Italy" when="9/9/2007"/>
+	    <mx:Object recordName="27" recordAmount="19.32 seconds" who="Michael Johnson" where="Atlanta, GA, USA" when="9/1/1996"/>
+	    <mx:Object recordName="28" recordAmount="43.18 seconds" who="Michael Johnson" where="Seville, Spain" when="9/26/1999"/>
+	    <mx:Object recordName="29" recordAmount="1:41.11" who="Wilson Kipketer" where="Cologne, Germany" when="9/24/1997"/>
+	    <mx:Object recordName="30" recordAmount="2:11.96" who="Noah Ngeny" where="Rieti, Italy" when="9/5/1999"/>  
 	</mx:ArrayCollection>	
 	
 	<mx:Script>
