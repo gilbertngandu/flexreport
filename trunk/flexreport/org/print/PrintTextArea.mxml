@@ -32,56 +32,48 @@
  * 
  */
  -->
-<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns="*" 
-	change="invalidateSize()"
-	verticalScrollPolicy="off"
-	horizontalScrollPolicy="off" 
-	borderStyle="none"
-	color="#000000">
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" creationComplete="initComponent()" borderStyle="solid">
 
   <mx:Script>
   	<![CDATA[
+  		import mx.core.EdgeMetrics;
+  		import mx.core.ScrollPolicy;
+  		
+		private function initComponent():void 
+		{
+			horizontalScrollPolicy = ScrollPolicy.OFF;
+			verticalScrollPolicy = ScrollPolicy.OFF;
+			//setStyle("borderStyle","none");
+			selectable = false;
+			percentHeight = 100;			
+		}
+		
+		public var count:Number=0;
+		private var currentLine:uint = 0;
+		
 		public function get validNextPage():Boolean
-		{			
-			var nextPosition:int = verticalScrollPosition + numLines - maxVerticalScrollPosition;	
-		
-			return (nextPosition<numLines) ? true : false;
+		{		
+			return (currentLine<numLines) ? true : false;
 		}   
-		
-		private var originalPercentHeight:Number;
-		private var originalHeight:Number;
-		
+					
 		public function nextPage():void
 		{	
-			if (validNextPage) {
-				if (!isNaN(percentHeight)) {
-					originalPercentHeight = percentHeight;
-				}
-				else if (!isNaN(height)) {
-					originalHeight = height;
-				}
+			if (currentLine < maxVerticalScrollPosition) {
+				verticalScrollPosition = currentLine;
+			}
+			else {			
+				var nextHeight:Number = 0;
 				
-				var nextPosition:int = verticalScrollPosition + numLines - maxVerticalScrollPosition;
+				for (var i:int = currentLine - 1; i < numLines; i++) {
+					nextHeight += getLineMetrics(i).height;
+				}
+									
+				height = nextHeight;
+				validateNow();
 				
-				if (nextPosition < maxVerticalScrollPosition) {
-					verticalScrollPosition = nextPosition;
-				}
-				else {			
-					var nextHeight:Number = 0;
-					
-					for (var i:int = nextPosition - 1; i < numLines; i++) {
-						nextHeight += getLineMetrics(i).height;
-					}
-					
-					if (isNaN(originalHeight)) originalHeight = height;
-					
-					height = nextHeight;
-					validateNow();
-					
-					verticalScrollPosition = maxVerticalScrollPosition;
-					
-				}
+				verticalScrollPosition = maxVerticalScrollPosition;
+				
+				currentLine = verticalScrollPosition + numLines - maxVerticalScrollPosition;
 			}
 		}
 		
@@ -96,14 +88,8 @@
 		}
 		
 		public function reset():void
-		{
-			if (!isNaN(originalPercentHeight)) {
-				percentHeight = originalPercentHeight;
-			}
-			else if (!isNaN(originalHeight)) {
-				height = originalHeight;
-			}
-			
+		{	
+			percentHeight = 100;	
 			verticalScrollPosition = 0;
 			
 			invalidateProperties();
@@ -116,7 +102,36 @@
 			validateNow();
 			
 			return textField.numLines;
-		}			
+		}
+		
+		[PercentProxy("percentHeight")]
+		override public function set height(value:Number):void
+		{
+			if(super.height==value) {
+				currentLine=verticalScrollPosition+numLines-maxVerticalScrollPosition;
+				
+				if(currentLine==numLines) {
+					var _textHeight:Number = 0;
+					
+					for(var i:int=0;i<numLines;i++) {
+						_textHeight += textField.getLineMetrics(i).height;
+					}
+					super.height = (_textHeight<value)?_textHeight:value;
+				} else {
+					super.height = value;
+				}
+			}
+			else {
+				super.height = value;
+			}
+			
+			
+		}
+		
+		override public function get height():Number
+		{
+			return super.height
+		}		
 	]]>	    
   </mx:Script>
 </mx:TextArea> 
