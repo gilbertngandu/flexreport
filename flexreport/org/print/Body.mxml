@@ -32,7 +32,7 @@
  * 
  */
  -->
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initComponent()">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initComponent()" verticalGap="0">
 	
 	<mx:Script>
 		<![CDATA[
@@ -105,13 +105,25 @@
 					if(child.visible) {
 						previousPage.put(child.id,child);
 					}
-				}					
+				}		
 			}
 			
 			private function displayed(value:Object):Boolean {
 				return previousPage.containsValue(value);	
 			}
 			
+			private function get availableHeight():Number {
+				var usedHeight:Number = 0;
+				
+				for each (var child:UIComponent in children) {
+					if(child.visible) {
+						usedHeight+=child.height;
+					}
+				}
+				
+				return height-usedHeight;					
+			}
+						
 			private function render():void
 			{
 				hideAllChildren();
@@ -119,14 +131,26 @@
 				currentChildIndex = 0;		
 				
 				while (maxVerticalScrollPosition === 0 && currentChildIndex<numChildren) {
-					showChildAt(currentChildIndex);
-				
 					var childInstance:Object = children[currentChildIndex];
-					if (childInstance.hasOwnProperty("validNextPage") && childInstance.validNextPage) {
+					
+					if (childInstance.hasOwnProperty("validNextPage")) {
+						var actualHeight:Number = availableHeight;
+						showChild(childInstance as UIComponent);
+						
+						childInstance.height = actualHeight;						
 						validateNow();
-						break;
+						
+						currentChildIndex++;
+						
+						if(childInstance.validNextPage) {
+							currentChildIndex--;
+							break;
+						}
 					}
-					currentChildIndex++;
+					else {
+						showChild(childInstance as UIComponent);
+						currentChildIndex++;
+					}
 				} 
 				
 				if (currentChildIndex >= numChildren) {
@@ -156,35 +180,45 @@
 				for (var i:int=currentChildIndex; i<numChildren; i++) {				
 					var childInstance:Object = children[i];
 					
-					if (childInstance.hasOwnProperty("validNextPage")&&displayed(childInstance as UIComponent)) {
-						showChildAt(i);
+					var actualHeight:Number
+					if (childInstance.hasOwnProperty("validNextPage")&&displayed(childInstance as UIComponent)) 
+					{
+						hideAllChildren();
+						actualHeight = availableHeight;
 						
-						if (childInstance.validNextPage) {
+						showChildAt(i);
+						childInstance.height = actualHeight;						
+						
+						//validateNow();
+						if (childInstance.validNextPage) 
+						{
 							childInstance.nextPage();
 						}
 						
-						hideAllChildrenBefore(currentChildIndex);
-						
-						if (childInstance.validNextPage) {
+						if (childInstance.validNextPage) 
+						{
 							validateNow();
 							currentChildIndex = i;
 							break;
 						}
-						
-					} else if(!displayed(childInstance)){
+					} 
+					else if(!displayed(childInstance))
+					{
 						hideAllChildrenBefore(currentChildIndex);
 						
-						showChildAt(i);	
-						
 						//FIXES ISSUE WITH PRINTDATAGRID
-						childInstance.percentHeight = 100;
+						actualHeight = availableHeight;
+						
+						showChildAt(i);
+						childInstance.height = actualHeight;
 						validateNow();
 						
 						currentChildIndex = i;
 						break;	
-					} else if (childInstance.validNextPage) {
+					} 
+					else if (childInstance.validNextPage) 
+					{
 						hideAllChildrenBefore(currentChildIndex);
-
 						currentChildIndex = i;
 						break;
 					} 
