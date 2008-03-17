@@ -50,12 +50,13 @@
 	import org.alivepdf.saving.Download;
 	import org.alivepdf.saving.Method;
 	import org.print.Report;
+	import org.utils.ByteArrayUtil;
 	import org.utils.PDFEncoder;
 	import org.utils.PageRangeManager;
 	
 	public class Document
 	{
-		public static const PAGE_SCALE:Number = 1;
+		public static const PAGE_SCALE:Number = 1.25;
 		
 		private var _template:Report;
 		private var _pages:Array = new Array();
@@ -64,7 +65,7 @@
 		public var currentPage:*;
 		
 		[Bindable]
-		public var pageNumber:int = 2;
+		public var pageNumber:int = 1;
 		
 		private var _templateName : String; 
 		private var _dataProvider : Object;
@@ -128,18 +129,18 @@
 
 			Application.application.removeChild(template);
 			
-			currentPage = clone(_pages[0]);
+			currentPage = ByteArrayUtil.clone(_pages[0]);
 			dispatchEvent(new Event("pageCountChanged"));
 		}
 				
-		private function getSnapshot(target:UIComponent):ByteArray {		
+		private function getSnapshot(target:UIComponent):ByteArray {	
+			/*BENCHMARK*/var start:Number = new Date().getTime();	
 			var bd:BitmapData = new BitmapData(target.width*PAGE_SCALE, target.height*PAGE_SCALE, false);
 			var m:Matrix = new Matrix();
 			
 			m.scale(PAGE_SCALE,PAGE_SCALE);
 			bd.draw(target,m);
 			
-			/*BENCHMARK*/var start:Number = new Date().getTime();
 			var bytes:ByteArray = bd.getPixels(new Rectangle(0,0,target.width*PAGE_SCALE,target.height*PAGE_SCALE));
 			/*BENCHMARK*/var uncompressedSize:uint = bytes.length;
 			bytes.compress();
@@ -224,7 +225,7 @@
 			if (pageNumber < _pages.length) {
 				pageNumber++;
 
-				currentPage = clone(_pages[pageNumber-1]);
+				currentPage = ByteArrayUtil.clone(_pages[pageNumber-1]);
 			}
 		}
 
@@ -233,14 +234,14 @@
 			if (pageNumber > 1) {
 				pageNumber--;
 				
-				currentPage = clone(_pages[pageNumber-1]);
+				currentPage = ByteArrayUtil.clone(_pages[pageNumber-1]);
 			}
 		}
 		
 		public function goto(page:int):int
 		{
 			if (page > 0 && page <= pageCount) {
-				currentPage = clone(_pages[page-1]);
+				currentPage = ByteArrayUtil.clone(_pages[page-1]);
 				
 				pageNumber = page;
 			}
@@ -257,7 +258,7 @@
 		{
 			var result:Array = new Array();
 			for (var i:int = 0; i < _pages.length; i++) {
-				result.push(clone(_pages[i]));
+				result.push(ByteArrayUtil.clone(_pages[i]));
 			}
 			return result;
 		}
@@ -276,12 +277,5 @@
 		
 		[Bindable]
 		public var checked:Boolean = false;
-		
-		private function clone(source:Object):*{
-		    var myBA:ByteArray = new ByteArray();
-		    myBA.writeObject(source);
-		    myBA.position = 0;
-		    return myBA.readObject();
-		}
 	}
 }
