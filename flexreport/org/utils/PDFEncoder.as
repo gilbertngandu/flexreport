@@ -2,16 +2,15 @@ package org.utils
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	import flash.utils.ByteArray;
 	
 	import org.alivepdf.layout.Orientation;
-	import org.alivepdf.layout.Size;
 	import org.alivepdf.layout.Unit;
 	import org.alivepdf.pdf.PDF;
+	import org.doc.Document;
 	import org.doc.PaperFormat;
-	import org.print.Page;
 	
 	public class PDFEncoder extends EventDispatcher
 	{
@@ -36,46 +35,31 @@ package org.utils
 		}
 		
 		public function encode():void {
+			var pdf:PDF = new PDF(Orientation.PORTRAIT, Unit.MM, _paperFormat.toSize());
+			
 			var pageCount:int = _pages.length;
 			for (var i:int = 0; i < pageCount; i++) {
-				var page:Page = new Page();
-				page.number = i+1;
-				_loadedPages.push(page);
+										
+				/*BENCHMARK*/var start:Number = new Date().getTime();
+				pdf.addPage();
 				
-				page.addEventListener(Event.COMPLETE,pageLoadedHandler);
+				var pageBytes:ByteArray = ByteArrayUtil.clone(_pages[i]);
+				pageBytes.uncompress();
 				
-				page.source = _pages[i];
-				page.paperFormat = _paperFormat;		
-			}
-		}
-		
-		private var _loadCount:int = 0;
-		private function pageLoadedHandler(event:Event):void {
-			_loadCount++;
-			var pageCount:int = _pages.length;
-			
-			if(_loadCount===pageCount) {
-				var pdf:PDF = new PDF ( Orientation.PORTRAIT, Unit.MM, Size.A4 );
-
-				for (var i:int = 0; i < pageCount; i++) {
-					pdf.addPage();
-
-					var page:Page = _loadedPages[i] as Page;
-					
-					var pageSnapshotBMP:Bitmap = new Bitmap(page.bitmapData);		
-					pageSnapshotBMP.smoothing = true;
-					
-					var scale:Number = PaperFormat.A4.width / page.bitmapData.width;
-					var matrix:Matrix = new Matrix();
-					var bd:BitmapData = new BitmapData( PaperFormat.A4.width, PaperFormat.A4.height, false );
-		
-					matrix.scale( scale, scale );
-					bd.draw( pageSnapshotBMP, matrix );
+				var bd:BitmapData = new BitmapData(_paperFormat.width*Document.PAGE_SCALE,_paperFormat.height*Document.PAGE_SCALE);
+				
+				bd.setPixels(new Rectangle(0,0,_paperFormat.width*Document.PAGE_SCALE,_paperFormat.height*Document.PAGE_SCALE),pageBytes);	
 							
-					pdf.addImage(new Bitmap(bd));					
-				}
-				pdf.savePDF(_method, _URL, _download, _name);				
+				var page:Bitmap = new Bitmap(bd);
+				//page.smoothing = true;
+				/*BENCHMARK*/var end1:Number = new Date().getTime();
+				pdf.addImage(page);		
+				/*BENCHMARK*/var end2:Number = new Date().getTime();
+				/*BENCHMARK*/trace("uncompressImage: " + (end1-start) + " addPage:" + (end2-end1) + " time:" + (end2-start));				
 			}
+			
+			pdf.savePDF(_method, _URL, _download, _name);							
 		}
+		
 	}
 }
