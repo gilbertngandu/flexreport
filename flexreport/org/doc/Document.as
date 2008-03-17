@@ -33,13 +33,12 @@
  
  package org.doc
 {
-	import org.utils.PNGEncoder;
-	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
 	
@@ -56,6 +55,8 @@
 	
 	public class Document
 	{
+		public static const PAGE_SCALE:Number = 1;
+		
 		private var _template:Report;
 		private var _pages:Array = new Array();
 		private var _thumbs:Array = new Array();
@@ -63,7 +64,7 @@
 		public var currentPage:*;
 		
 		[Bindable]
-		public var pageNumber:int = 1;
+		public var pageNumber:int = 2;
 		
 		private var _templateName : String; 
 		private var _dataProvider : Object;
@@ -119,27 +120,33 @@
 			
 			_template.validateNow();
 			_template.reset();
+
 			do {
 				_pages.push(getSnapshot(_template as UIComponent));
 				_thumbs.push(getThumb(_template as UIComponent));
 			} while (_template.nextPage());
-			
+
 			Application.application.removeChild(template);
 			
 			currentPage = clone(_pages[0]);
 			dispatchEvent(new Event("pageCountChanged"));
 		}
 				
-		private function getSnapshot(target:UIComponent):ByteArray {
-			var scale:Number = 2;
-			
-			var bd:BitmapData = new BitmapData(target.width*scale, target.height*scale, false);
+		private function getSnapshot(target:UIComponent):ByteArray {		
+			var bd:BitmapData = new BitmapData(target.width*PAGE_SCALE, target.height*PAGE_SCALE, false);
 			var m:Matrix = new Matrix();
 			
-			m.scale(scale,scale);
+			m.scale(PAGE_SCALE,PAGE_SCALE);
 			bd.draw(target,m);
 			
-			return new PNGEncoder().encode(bd);
+			/*BENCHMARK*/var start:Number = new Date().getTime();
+			var bytes:ByteArray = bd.getPixels(new Rectangle(0,0,target.width*PAGE_SCALE,target.height*PAGE_SCALE));
+			/*BENCHMARK*/var uncompressedSize:uint = bytes.length;
+			bytes.compress();
+			/*BENCHMARK*/var compressedSize:uint = bytes.length;
+			/*BENCHMARK*/var end1:Number = new Date().getTime();
+			/*BENCHMARK*/trace("uncompressedSize: " + uncompressedSize + " compressedSize:" + compressedSize + " time:" + (end1-start));
+			return bytes;
 		}
 		
 		private static const THUMB_WIDTH:Number = 77;
