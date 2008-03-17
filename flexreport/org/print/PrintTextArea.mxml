@@ -32,7 +32,7 @@
  * 
  */
  -->
-<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" creationComplete="initComponent()" borderStyle="solid">
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" creationComplete="initComponent()" borderStyle="solid" borderColor="#FFFFFF">
 
   <mx:Script>
   	<![CDATA[
@@ -43,7 +43,7 @@
 		{
 			horizontalScrollPolicy = ScrollPolicy.OFF;
 			verticalScrollPolicy = ScrollPolicy.OFF;
-			//setStyle("borderStyle","none");
+
 			selectable = false;
 			percentHeight = 100;			
 		}
@@ -124,8 +124,6 @@
 			else {
 				super.height = value;
 			}
-			
-			
 		}
 		
 		override public function get height():Number
