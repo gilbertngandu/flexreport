@@ -39,12 +39,9 @@
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off">
 	
-	<mx:Metadata>
-        [Event(name="complete",type="flash.events.Event")]	
-	</mx:Metadata>
-		
 	<mx:Script>
 		<![CDATA[
+			import org.doc.Document;
 			import org.doc.PaperFormat;
 			
 			public static const FIRST_PAGE:uint = 0;
@@ -57,11 +54,12 @@
 			public function set source(value:ByteArray):void
 			{
 				_source = value;
+				_source.uncompress();
 				
 				verticalScrollPosition = 0;
 				
 				if(_paperFormat!==null) {
-					load();
+					render();
 				}
 				
 				dispatchEvent(new Event("sourceChanged"));
@@ -83,33 +81,14 @@
 					width = _paperFormat.width;	
 				}
 				
-				load();			
-			}
-			
-			[Bindable] private var _bitmap:Bitmap;
-			private function load():void {
-				var loader:Loader = new Loader();
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadCompleteHandler);
-
-				loader.loadBytes(_source);
-			}
-				
-			private function loadCompleteHandler(event:Event):void {
-				var loader:Loader = Loader(event.target.loader);
-				_bitmap = Bitmap(loader.content);
-				
-				render();
-
-				dispatchEvent(new Event(Event.COMPLETE));
+				render();			
 			}
 			
 			private var _smoothBitmap:Bitmap;
 			public function render():void {
-				var bd:BitmapData = new BitmapData(_bitmap.width, _bitmap.height, false);
-				var m:Matrix = new Matrix();
-
-				bd.draw(_bitmap,m);	
-				
+				var bd:BitmapData = new BitmapData(_paperFormat.width*Document.PAGE_SCALE,_paperFormat.height*Document.PAGE_SCALE);
+				bd.setPixels(new Rectangle(0,0,_paperFormat.width*Document.PAGE_SCALE,_paperFormat.height*Document.PAGE_SCALE),clone(_source));	
+							
 				_smoothBitmap = new Bitmap(bd);			
 				_smoothBitmap.smoothing = true;
 				
@@ -117,8 +96,15 @@
 			}
 										        
 	        public function get bitmapData():BitmapData {
-	        	return _bitmap!==null?_bitmap.bitmapData:null;
-	        }			
+	        	return _smoothBitmap!==null?_smoothBitmap.bitmapData:null;
+	        }
+	        
+			private function clone(source:Object):*{
+			    var myBA:ByteArray = new ByteArray();
+			    myBA.writeObject(source);
+			    myBA.position = 0;
+			    return myBA.readObject();
+			}	        			
 		]]>
 	</mx:Script>
 	<mx:Image id="printPreview" left="0" right="0" top="0" bottom="0"/>
