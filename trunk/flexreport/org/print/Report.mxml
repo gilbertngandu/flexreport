@@ -46,8 +46,7 @@
     creationComplete="initComponent()"
     fontFamily="Timeless"
     fontAntiAliasType="normal" 
-    xmlns:print="org.print.*" 
-    >
+    xmlns:print="org.print.*">
 
     <mx:Script>
         <![CDATA[
