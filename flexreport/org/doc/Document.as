@@ -68,20 +68,18 @@
 		[Bindable]
 		public var pageNumber:int = 1;
 		
-		private var _templateName : String; 
 		private var _dataProvider : Object;
 		private var _paperFormat  : PaperFormat;
 		
 		private var _pageRangeManager : PageRangeManager = new PageRangeManager(PageRangeManager.ALL);
 		 		
-		public function Document(template:String, dataProvider:Object, paperFormat : PaperFormat = null):void
+		public function Document(template:Report, dataProvider:Object = null, paperFormat : PaperFormat = null):void
 		{
 			_dataProvider = dataProvider;
-			_templateName = template;
-			
+			_template = template;
 			_paperFormat = paperFormat;
 			
-			createTemplate();
+			setUpTemplate();
 			capturePages();
 			
 			title = _template.title;
@@ -91,13 +89,12 @@
 			return _paperFormat;
 		}
 		
-		public function createTemplate() : void
+		public function setUpTemplate() : void
 		{
-			var classReference:Class = getDefinitionByName(_templateName) as Class;
-			
-			_template = new classReference();
  			_template.initialize();
-			_template.dataProvider = _dataProvider; 
+ 			
+ 			if (_dataProvider != null)
+				_template.dataProvider = _dataProvider; 
 			_template.invalidateDisplayList();
 			
  			if (_paperFormat != null) 			
@@ -174,7 +171,7 @@
             printJob.printAsBitmap = false;
           
 			if (printJob.start()) {
-				createTemplate();
+				setUpTemplate();
 				Application.application.addChild(template);
 				_template.validateNow();
 				_template.reset();
