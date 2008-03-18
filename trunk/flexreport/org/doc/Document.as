@@ -46,6 +46,7 @@
 	import mx.core.Application;
 	import mx.core.UIComponent;
 	import mx.printing.FlexPrintJob;
+	import mx.printing.FlexPrintJobScaleType;
 	
 	import org.alivepdf.saving.Download;
 	import org.alivepdf.saving.Method;
@@ -171,7 +172,7 @@
 		{
             var printJob:FlexPrintJob = new FlexPrintJob();
             printJob.printAsBitmap = false;
-                       
+          
 			if (printJob.start()) {
 				createTemplate();
 				Application.application.addChild(template);
@@ -180,7 +181,7 @@
 				
 				do {
 					if (_pageRangeManager.canPrint(_template.pageNumber))
-						printJob.addObject(_template as UIComponent);
+						printJob.addObject(_template as UIComponent,FlexPrintJobScaleType.FILL_PAGE);
 				} while(_template.nextPage());
 				
 				Application.application.removeChild(template);

@@ -41,6 +41,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import org.doc.PaperFormat;
 			import org.doc.PageFit;
 			import mx.events.ResizeEvent;
 			import mx.states.SetStyle;
@@ -243,7 +244,7 @@
 			<mx:VBox id="box" horizontalAlign="center" verticalAlign="middle" 
 				paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"
 				left="0" top="0" right="20" bottom="0">
-				<print:Page id="page" source="{_doc.currentPage}"/>
+				<print:Page id="page" source="{_doc.currentPage}" width="{PaperFormat.A4.width}" height="{PaperFormat.A4.height}"/>
 			</mx:VBox>			
 		</mx:Canvas>
 	</mx:HBox>
