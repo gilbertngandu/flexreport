@@ -91,6 +91,7 @@
 							
 				_smoothBitmap = new Bitmap(bd);			
 				_smoothBitmap.smoothing = true;
+				_smoothBitmap.pixelSnapping = PixelSnapping.ALWAYS;
 				
 				printPreview.source = _smoothBitmap;
 			}
