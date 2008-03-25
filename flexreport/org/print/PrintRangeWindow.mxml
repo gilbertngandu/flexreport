@@ -69,7 +69,7 @@
 					break;
 			}
 			
-			parent.dispatchEvent(new PageRangeEvent(pageRangeManager));
+			owner.dispatchEvent(new PageRangeEvent(pageRangeManager));
 			PopUpManager.removePopUp(this);
 		}
 		

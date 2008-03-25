@@ -89,6 +89,7 @@
             	dialog.currentPage = _doc.pageNumber;
             	PopUpManager.addPopUp(dialog, this, true);
             	PopUpManager.centerPopUp(dialog);
+            	dialog.owner = this;
             }
             
             [Bindable]
