@@ -137,7 +137,7 @@
             
             public function onCreationComplete() : void
             {
-            	systemManager.addEventListener(PageRangeEvent.PAGE_RANGE_EVENT, printRange);             	
+            	addEventListener(PageRangeEvent.PAGE_RANGE_EVENT, printRange);             	
             }
             
 			private function printRange(event : PageRangeEvent) : void
