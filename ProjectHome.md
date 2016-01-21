@@ -1,0 +1,1 @@
+FlexReport is a client-side report generation component. It allows you to easily generate, preview and print reports based in mxml/as3 templates.
